@@ -202,7 +202,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-slate-700 mb-2">Legal Area</label>
-                    <Select value={formData.legalArea} onValueChange={(value) => handleInputChange('legalArea', value)}>
+                    <Select value={formData.legalArea} onValueChange={(value: string) => handleInputChange('legalArea', value)}>
                       <SelectTrigger className="bg-white border-slate-200 focus:border-blue-500">
                         <SelectValue placeholder="Select legal area" />
                       </SelectTrigger>
@@ -220,7 +220,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                   </div>
                   <div>
                     <label className="block text-slate-700 mb-2">Urgency Level</label>
-                    <Select value={formData.urgency} onValueChange={(value) => handleInputChange('urgency', value)}>
+                    <Select value={formData.urgency} onValueChange={(value: string) => handleInputChange('urgency', value)}>
                       <SelectTrigger className="bg-white border-slate-200 focus:border-blue-500">
                         <SelectValue placeholder="Select urgency" />
                       </SelectTrigger>

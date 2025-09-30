@@ -8,7 +8,7 @@ import AppLayout from '../layouts/AppLayout';
 
 // Pages
 import HomePage from '../pages/HomePage';
-import ClientDashboardPage from '../pages/dashboard/ClientDashboardPage';
+import ClientDashboardPage from '../pages/dashboard/ClientDashboardPageRefactored';
 import LawyerDashboardPage from '../pages/dashboard/LawyerDashboardPage';
 
 // Static pages - using existing components
