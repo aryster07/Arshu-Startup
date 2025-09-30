@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { LawyerRecommendation } from './LawyerRecommendation';
 import { useSpeechRecognition, SUPPORTED_LANGUAGES, getLanguageByCode } from '../../hooks/useSpeechRecognition';
 import { useDashboardAnalysis } from '../../hooks/dashboard/useDashboardAnalysis';
 import { Mic, MicOff, Send, Languages, Volume2, Loader2 } from 'lucide-react';
@@ -223,6 +224,25 @@ export function AnalysisSection({ selectedLanguage, onLanguageChange, isInCard =
                           {state.detailedAnalysis}
                         </div>
                       </div>
+                      
+                      {/* Lawyer Recommendation Section - Always show for detailed analysis */}
+                      <div className="mt-4">
+                        {state.lawyerRecommendation?.suggested ? (
+                          <LawyerRecommendation specialization={state.lawyerRecommendation.specialization} />
+                        ) : (
+                          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div className="flex items-center space-x-2 mb-3">
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <h5 className="font-medium text-green-900">Professional Legal Consultation Recommended</h5>
+                            </div>
+                            <p className="text-green-800 mb-3">
+                              Based on your detailed analysis, we recommend consulting with a legal professional for expert guidance.
+                            </p>
+                            <LawyerRecommendation specialization="General Legal Expert" />
+                          </div>
+                        )}
+                      </div>
+                      
                       <div className="mt-3 flex space-x-2">
                         <Button
                           onClick={resetAnalysis}
@@ -429,6 +449,11 @@ export function AnalysisSection({ selectedLanguage, onLanguageChange, isInCard =
                     </Button>
                   </div>
                 </div>
+              )}
+              
+              {/* Lawyer Recommendation for Modern Layout */}
+              {state.lawyerRecommendation?.suggested && state.showDetailedAnalysis && (
+                <LawyerRecommendation specialization={state.lawyerRecommendation.specialization} />
               )}
             </Card>
           )}

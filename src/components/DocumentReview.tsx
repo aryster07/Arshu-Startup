@@ -216,22 +216,38 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
           {/* Upload New Document */}
           <div className="lg:col-span-2">
             <Card className="p-8">
-              <div className="flex items-center mb-6">
-                <Zap className="h-6 w-6 text-blue-600 mr-2" />
-                <h2 className="text-2xl font-bold text-slate-900">AI Document Analysis</h2>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <Zap className="h-6 w-6 text-blue-600 mr-2" />
+                  <h2 className="text-2xl font-bold text-slate-900">AI Document Analysis</h2>
+                </div>
+                <Button 
+                  onClick={() => {
+                    if (selectedDocument && !isAnalyzing) {
+                      document.getElementById('file-upload')?.click();
+                    } else if (!selectedDocument) {
+                      alert('Please select a document type first!');
+                    }
+                  }}
+                  className={`${!selectedDocument ? 'opacity-75' : 'hover:bg-blue-700'} bg-blue-600 text-white`}
+                  disabled={isAnalyzing}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Quick Upload
+                </Button>
               </div>
 
               {/* Document Type Selection */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-slate-900 mb-3">
-                  Select Document Type
+                  1. Select Document Type
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {documentTypes.map((type) => (
                     <div
                       key={type.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedDocument === type.id
-                        ? 'border-blue-500 bg-blue-50 shadow-md'
+                        ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200'
                         : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
                         }`}
                       onClick={() => setSelectedDocument(type.id)}
@@ -239,6 +255,9 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
                       <div className="flex items-center mb-2">
                         {type.icon}
                         <h3 className="font-medium text-slate-900 ml-2">{type.name}</h3>
+                        {selectedDocument === type.id && (
+                          <CheckCircle className="h-4 w-4 text-blue-600 ml-auto" />
+                        )}
                       </div>
                       <p className="text-sm text-slate-600">{type.description}</p>
                     </div>
@@ -249,7 +268,37 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
               {/* File Upload Area */}
               <div className="flex-grow flex flex-col">
                 <label className="block text-sm font-medium text-slate-900 mb-2">2. Upload Document</label>
-                <div className={`border-2 border-dashed rounded-lg p-4 text-center transition-all flex-grow flex flex-col justify-center ${isAnalyzing ? 'border-blue-300 bg-blue-50' : 'border-slate-300 hover:border-blue-400'}`}>
+                <div 
+                  className={`border-2 border-dashed rounded-lg p-8 text-center transition-all flex-grow flex flex-col justify-center ${
+                    isAnalyzing ? 'border-blue-300 bg-blue-50' : 'border-slate-300 hover:border-blue-400'
+                  } ${selectedDocument ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                  onClick={() => {
+                    if (selectedDocument && !isAnalyzing) {
+                      document.getElementById('file-upload')?.click();
+                    }
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    if (selectedDocument) {
+                      e.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
+                    }
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+                    if (selectedDocument && !isAnalyzing) {
+                      const files = e.dataTransfer.files;
+                      if (files && files[0]) {
+                        const event = { target: { files } } as React.ChangeEvent<HTMLInputElement>;
+                        handleFileUpload(event);
+                      }
+                    }
+                  }}
+                >
                   {isAnalyzing ? (
                     <div className="flex flex-col items-center">
                       <Brain className="h-10 w-10 text-blue-600 mx-auto mb-3 animate-pulse" />
@@ -259,16 +308,37 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
                     </div>
                   ) : (
                     <>
-                      <Upload className="h-10 w-10 text-slate-400 mx-auto mb-3" />
-                      <p className="text-slate-600 text-sm mb-1">Drop document here or click to upload</p>
-                      <p className="text-xs text-slate-500 mb-3">PDF, DOC, DOCX up to 10MB</p>
-                      <input type="file" accept=".pdf,.doc,.docx" className="hidden" id="file-upload" onChange={handleFileUpload} disabled={!selectedDocument || isAnalyzing} />
-                      <label htmlFor="file-upload">
-                        <Button className={`cursor-pointer ${!selectedDocument ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!selectedDocument || isAnalyzing}>
-                          <Brain className="h-4 w-4 mr-2" />Start AI Analysis
-                        </Button>
-                      </label>
-                      {!selectedDocument && <p className="text-xs text-red-500 mt-2">Please select a document type first</p>}
+                      <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                      <p className="text-slate-600 text-lg font-medium mb-2">
+                        {selectedDocument ? 'Drop document here or click to upload' : 'Select document type first'}
+                      </p>
+                      <p className="text-xs text-slate-500 mb-4">PDF, DOC, DOCX up to 10MB</p>
+                      <input 
+                        type="file" 
+                        accept=".pdf,.doc,.docx" 
+                        className="hidden" 
+                        id="file-upload" 
+                        onChange={handleFileUpload} 
+                        disabled={!selectedDocument || isAnalyzing} 
+                      />
+                      <Button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (selectedDocument && !isAnalyzing) {
+                            document.getElementById('file-upload')?.click();
+                          }
+                        }}
+                        className={`${!selectedDocument ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} bg-blue-600 text-white px-6 py-2`} 
+                        disabled={!selectedDocument || isAnalyzing}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Document
+                      </Button>
+                      {!selectedDocument && (
+                        <p className="text-xs text-red-500 mt-3">
+                          ⚠️ Please select a document type above first
+                        </p>
+                      )}
                     </>
                   )}
                 </div>

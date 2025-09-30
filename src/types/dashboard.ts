@@ -13,6 +13,10 @@ export interface DashboardState {
   isLoadingDetailed: boolean;
   nonLegalMessage: string;
   activeTab: DashboardTab;
+  lawyerRecommendation: {
+    suggested: boolean;
+    specialization: string;
+  } | null;
 }
 
 export interface SpeechRecognitionState {

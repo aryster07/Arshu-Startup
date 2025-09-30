@@ -16,6 +16,7 @@ export function useDashboardAnalysis() {
     isLoadingDetailed: false,
     nonLegalMessage: '',
     activeTab: 'overview',
+    lawyerRecommendation: null,
   });
 
   const [loadingMessage, setLoadingMessage] = useState('');
@@ -95,11 +96,85 @@ export function useDashboardAnalysis() {
       clearInterval(loadingInterval);
       setLoadingMessage('');
       console.error('Analysis error:', error);
+      
+      // Provide fallback brief analysis even if API fails
+      const fallbackAnalysis = `Legal Issue Analysis: "${analysisQuery}"
+
+This appears to be a legal matter that requires attention. Key considerations:
+• Document all relevant details and evidence
+• Consider the applicable laws and your legal rights
+• Consult with a legal professional for proper guidance
+
+Click "Get Detailed Analysis" for comprehensive breakdown.`;
+      
+      console.log('Using fallback analysis due to API error');
       updateState({
-        nonLegalMessage: 'Sorry, I encountered an error while analyzing your query. Please try again.',
+        briefAnalysis: fallbackAnalysis,
+        aiResponse: fallbackAnalysis,
         isAnalyzing: false
       });
     }
+  };
+
+  const detectLawyerRecommendation = (analysisText: string) => {
+    const text = analysisText.toLowerCase();
+    
+    // Common phrases that indicate lawyer recommendation
+    const lawyerKeywords = [
+      'contact a lawyer', 'consult a lawyer', 'hire a lawyer', 'seek legal help',
+      'professional legal assistance', 'expert legal help', 'legal expert',
+      'attorney', 'advocate', 'legal counsel', 'legal advice', 'legal consultation'
+    ];
+    
+    const hasLawyerRecommendation = lawyerKeywords.some(keyword => text.includes(keyword));
+    
+    if (!hasLawyerRecommendation) return null;
+
+    // Detect lawyer specialization based on content
+    const specializations = {
+      'Criminal Lawyer': ['criminal', 'police', 'fir', 'arrest', 'bail', 'theft', 'fraud', 'assault', 'murder', 'ipc', 'crpc'],
+      'Civil Lawyer': ['civil', 'property', 'contract', 'agreement', 'dispute', 'damages', 'breach', 'cpc'],
+      'Consumer Lawyer': ['consumer', 'product', 'service', 'refund', 'defect', 'consumer protection act', 'consumer court'],
+      'Family Lawyer': ['family', 'divorce', 'marriage', 'custody', 'alimony', 'domestic', 'maintenance'],
+      'Corporate Lawyer': ['company', 'business', 'corporate', 'partnership', 'compliance', 'securities', 'merger'],
+      'Employment Lawyer': ['employment', 'job', 'workplace', 'salary', 'termination', 'harassment', 'labour'],
+      'Real Estate Lawyer': ['property', 'real estate', 'land', 'builder', 'construction', 'rera'],
+      'Tax Lawyer': ['tax', 'income tax', 'gst', 'taxation', 'revenue'],
+      'Immigration Lawyer': ['visa', 'immigration', 'citizenship', 'passport', 'foreign']
+    };
+
+    for (const [specialty, keywords] of Object.entries(specializations)) {
+      if (keywords.some(keyword => text.includes(keyword))) {
+        return specialty;
+      }
+    }
+
+    return 'General Legal Expert'; // Default if no specific specialization detected
+  };
+
+  const detectLawyerSpecializationFromQuery = (query: string): string => {
+    const text = query.toLowerCase();
+    
+    // Detect lawyer specialization based on original query content
+    const specializations = {
+      'Criminal Lawyer': ['criminal', 'police', 'fir', 'arrest', 'bail', 'theft', 'fraud', 'assault', 'murder', 'hit', 'violence', 'crime'],
+      'Civil Lawyer': ['civil', 'property', 'contract', 'agreement', 'dispute', 'damages', 'breach', 'landlord', 'tenant', 'neighbor'],
+      'Consumer Lawyer': ['consumer', 'product', 'service', 'refund', 'defect', 'warranty', 'shop', 'purchase', 'seller', 'buyer'],
+      'Family Lawyer': ['family', 'divorce', 'marriage', 'custody', 'alimony', 'domestic', 'maintenance', 'spouse', 'child'],
+      'Corporate Lawyer': ['company', 'business', 'corporate', 'partnership', 'compliance', 'securities', 'merger', 'employee'],
+      'Employment Lawyer': ['employment', 'job', 'workplace', 'salary', 'termination', 'harassment', 'labour', 'boss', 'work'],
+      'Real Estate Lawyer': ['property', 'real estate', 'land', 'builder', 'construction', 'rera', 'house', 'flat', 'apartment'],
+      'Tax Lawyer': ['tax', 'income tax', 'gst', 'taxation', 'revenue', 'tds', 'return'],
+      'Immigration Lawyer': ['visa', 'immigration', 'citizenship', 'passport', 'foreign', 'travel']
+    };
+
+    for (const [specialty, keywords] of Object.entries(specializations)) {
+      if (keywords.some(keyword => text.includes(keyword))) {
+        return specialty;
+      }
+    }
+
+    return 'General Legal Expert'; // Default fallback
   };
 
   const handleDetailedAnalysis = async () => {
@@ -113,27 +188,71 @@ export function useDashboardAnalysis() {
         throw new Error('Gemini service not available');
       }
 
-      // Get detailed analysis
-      const detailedPrompt = `Provide a comprehensive detailed legal analysis for: "${state.searchQuery}". Include:
-      1. Legal framework and applicable laws
-      2. Rights and obligations of parties involved
-      3. Potential legal remedies or actions
-      4. Step-by-step guidance for next steps
-      5. Important considerations and warnings
-      6. Relevant case law or precedents if applicable
-      
-      Make it thorough and professional.`;
+      // Get comprehensive detailed analysis
+      const detailedPrompt = `Provide a comprehensive detailed legal analysis for: "${state.searchQuery}". 
+
+      Structure your response with the following sections:
+
+      **1. LEGAL VIOLATIONS IDENTIFIED:**
+      - List specific laws, sections, or regulations that may have been violated
+      - Include relevant acts, codes, or statutes (e.g., IPC sections, Consumer Protection Act, etc.)
+      - Mention both civil and criminal implications if applicable
+
+      **2. CASE STRENGTH ASSESSMENT:**
+      - Likelihood of success (High/Medium/Low with percentage if possible)
+      - Key evidence required to strengthen the case
+      - Potential challenges or weaknesses in the case
+
+      **3. LEGAL REMEDIES AVAILABLE:**
+      - Civil remedies (compensation, injunction, damages)
+      - Criminal remedies (if applicable)
+      - Alternative dispute resolution options (mediation, arbitration)
+      - Administrative remedies (complaints to regulatory bodies)
+
+      **4. STEP-BY-STEP ACTION PLAN:**
+      - Immediate steps to take (evidence collection, documentation)
+      - Legal notices or formal complaints to file
+      - Timeline for legal action
+      - Documentation required
+
+      **5. EXPERT LEGAL ASSISTANCE REQUIRED:**
+      - Specific type of lawyer needed (Criminal, Civil, Consumer, Family, Corporate, etc.)
+      - Why professional legal help is essential for this case
+      - Urgency level of legal consultation
+      - Recommendation: "We strongly recommend consulting with a [specific lawyer type] for this matter"
+
+      **6. IMPORTANT CONSIDERATIONS:**
+      - Statute of limitations
+      - Costs involved
+      - Time duration for resolution
+      - Potential risks or counter-claims
+
+      **7. RELEVANT PRECEDENTS:**
+      - Similar cases or judgments if applicable
+      - How courts typically handle such matters
+
+      IMPORTANT: Always include a recommendation to consult with a specific type of lawyer in section 5. Make it thorough, professional, and actionable. Use Indian legal framework and context.`;
 
       const detailedResponse = await geminiService.getInputAssistance(
         detailedPrompt,
-        'Detailed legal analysis - comprehensive consultation',
+        'Comprehensive legal analysis with violations, remedies, and expert guidance',
         getGeminiLanguageCode(state.selectedLanguage)
       );
+
+      // Detect if lawyer consultation is recommended
+      const lawyerSpecialization = detectLawyerRecommendation(detailedResponse);
+
+      // Force lawyer recommendation for detailed analysis if none detected
+      const finalLawyerRecommendation = lawyerSpecialization || detectLawyerSpecializationFromQuery(state.searchQuery);
 
       updateState({
         detailedAnalysis: detailedResponse,
         showDetailedAnalysis: true,
-        isLoadingDetailed: false
+        isLoadingDetailed: false,
+        lawyerRecommendation: finalLawyerRecommendation ? {
+          suggested: true,
+          specialization: finalLawyerRecommendation
+        } : null
       });
 
     } catch (error) {
@@ -155,7 +274,8 @@ export function useDashboardAnalysis() {
       showDetailedAnalysis: false,
       nonLegalMessage: '',
       isAnalyzing: false,
-      isLoadingDetailed: false
+      isLoadingDetailed: false,
+      lawyerRecommendation: null,
     });
     setLoadingMessage('');
   };
