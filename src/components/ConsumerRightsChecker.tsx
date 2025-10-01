@@ -28,6 +28,7 @@ import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useNotification } from '../hooks/useNotification';
 import { getGeminiService } from '../services/geminiService';
 import type { LegalAnalysisResponse } from '../services/geminiService';
 import { useSpeechRecognition, SUPPORTED_LANGUAGES, getGeminiLanguageCode } from '../hooks/useSpeechRecognition';
@@ -44,6 +45,9 @@ export default function ConsumerRightsChecker({ onNavigate }: ConsumerRightsChec
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedLanguage, setSelectedLanguage] = useState<'en-IN' | 'hi-IN'>('en-IN');
   const [loadingMessage, setLoadingMessage] = useState('');
+
+  // Notification hook for user feedback
+  const notify = useNotification();
 
   // Speech recognition hook
   const {
@@ -123,7 +127,7 @@ export default function ConsumerRightsChecker({ onNavigate }: ConsumerRightsChec
 
   const handleAnalysis = async () => {
     if (!selectedCategory || !issueDescription.trim()) {
-      alert('Please select a category and describe your issue.');
+      notify.warning('Please select a category and describe your issue.');
       return;
     }
 
@@ -540,21 +544,21 @@ export default function ConsumerRightsChecker({ onNavigate }: ConsumerRightsChec
 
   return (
     <div className="h-full bg-slate-50">
-      <div className="max-w-8xl mx-auto px-8 py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
         {/* Progress Steps */}
-        <div className="flex items-center justify-center mb-12">
-          <div className="flex items-center space-x-4">
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
+        <div className="flex items-center justify-center mb-6 lg:mb-12">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base ${currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
               }`}>
               1
             </div>
-            <div className={`w-16 h-1 ${currentStep >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
+            <div className={`w-8 sm:w-16 h-1 ${currentStep >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
+            <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base ${currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
               }`}>
               2
             </div>
-            <div className={`w-16 h-1 ${currentStep >= 3 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
-            <div className={`flex items-center justify-center w-10 h-10 rounded-full ${currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
+            <div className={`w-8 sm:w-16 h-1 ${currentStep >= 3 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
+            <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base ${currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
               }`}>
               3
             </div>
@@ -562,11 +566,11 @@ export default function ConsumerRightsChecker({ onNavigate }: ConsumerRightsChec
         </div>
 
         {currentStep === 1 && (
-          <Card className="p-8 max-w-4xl mx-auto">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-6 text-center">
+          <Card className="p-4 lg:p-8 max-w-4xl mx-auto">
+            <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 mb-4 lg:mb-6 text-center">
               Select Your Issue Category
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
               {consumerCategories.map((category) => (
                 <Card
                   key={category.id}

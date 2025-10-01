@@ -6,6 +6,7 @@ import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { getGeminiService } from '../services/geminiService';
 import { useSpeechRecognition, SUPPORTED_LANGUAGES, getGeminiLanguageCode } from '../hooks/useSpeechRecognition';
+import { useNotification } from '../hooks/useNotification';
 
 interface LegalNoticeServiceProps {
   onNavigate?: (screen: string) => void;
@@ -27,6 +28,9 @@ export default function LegalNoticeService({ onNavigate }: LegalNoticeServicePro
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<'en-IN' | 'hi-IN'>('en-IN');
   const [loadingMessage, setLoadingMessage] = useState('');
+
+  // Notification hook for user feedback
+  const notify = useNotification();
 
   // Speech recognition hook
   const {
@@ -124,7 +128,7 @@ export default function LegalNoticeService({ onNavigate }: LegalNoticeServicePro
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Legal Notice Request:', formData);
-    alert('Your legal notice request has been submitted. Our team will review and contact you within 2 hours.');
+    notify.success('Your legal notice request has been submitted. Our team will review and contact you within 2 hours.');
     setFormData({
       clientName: '',
       clientEmail: '',

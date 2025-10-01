@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../ui/card';
+import { Button } from '../ui/button';
 import { Shield, ShoppingCart, FileText, Phone } from 'lucide-react';
 
 export interface LegalService {
@@ -44,40 +45,40 @@ interface ServicesGridProps {
 
 export function ServicesGrid({ className = "", isOriginalLayout = false }: ServicesGridProps) {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-${isOriginalLayout ? '8' : '6'} ${className}`}>
+    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 ${className}`}>
       {LEGAL_SERVICES.map((service, index) => (
         <Link key={index} to={service.path}>
-          <Card className={`${isOriginalLayout 
-            ? 'h-full p-8 hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105 hover:border-blue-200 group'
-            : 'p-6 hover:shadow-lg transition-shadow cursor-pointer'
-          }`}>
-            {isOriginalLayout ? (
-              // Original Layout - More spacious with animation
-              <div className="flex items-start space-x-4 h-full">
-                <div className="p-3 bg-slate-100 rounded-xl group-hover:bg-blue-100 transition-colors duration-300 flex-shrink-0">
-                  {service.icon}
-                </div>
-                <div className="flex-1 flex flex-col">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed flex-1">
-                    {service.description}
-                  </p>
+          <Card className="h-full p-6 lg:p-8 hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02] border border-slate-200 hover:border-blue-300 group bg-white">
+            <div className="flex flex-col h-full">
+              {/* Icon Header */}
+              <div className="flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-100 to-slate-100 rounded-2xl mb-6 group-hover:from-blue-200 group-hover:to-blue-100 transition-all duration-300 mx-auto">
+                <div className="text-blue-600 group-hover:text-blue-700 transition-colors duration-300">
+                  {React.cloneElement(service.icon as React.ReactElement, { 
+                    className: "h-8 w-8 lg:h-10 lg:w-10" 
+                  })}
                 </div>
               </div>
-            ) : (
-              // Modern Compact Layout
-              <div>
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                    {service.icon}
-                  </div>
-                  <h3 className="font-semibold text-slate-900">{service.title}</h3>
-                </div>
-                <p className="text-sm text-slate-600">{service.description}</p>
+              
+              {/* Content */}
+              <div className="text-center flex-1 flex flex-col">
+                <h3 className="text-lg lg:text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                  {service.title}
+                </h3>
+                <p className="text-sm lg:text-base text-slate-600 leading-relaxed flex-1 group-hover:text-slate-700 transition-colors duration-300 mb-4">
+                  {service.description}
+                </p>
+                
+                {/* Access Button */}
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm h-10 group-hover:bg-blue-700 transition-all duration-300"
+                >
+                  Access Service
+                </Button>
               </div>
-            )}
+              
+              {/* Bottom Accent */}
+              <div className="mt-4 h-1 bg-gradient-to-r from-blue-500 to-slate-300 rounded-full group-hover:from-blue-600 group-hover:to-blue-400 transition-all duration-300"></div>
+            </div>
           </Card>
         </Link>
       ))}

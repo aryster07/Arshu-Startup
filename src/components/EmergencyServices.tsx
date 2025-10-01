@@ -7,6 +7,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { getGeminiService } from '../services/geminiService';
 import { useSpeechRecognition, SUPPORTED_LANGUAGES, getGeminiLanguageCode } from '../hooks/useSpeechRecognition';
+import { useNotification } from '../hooks/useNotification';
 import {
   Home,
   Phone,
@@ -49,6 +50,9 @@ export default function EmergencyServices({ onNavigate }: EmergencyServicesProps
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<'en-IN' | 'hi-IN'>('en-IN');
   const [loadingMessage, setLoadingMessage] = useState('');
+
+  // Notification hook for user feedback
+  const notify = useNotification();
 
   // Speech recognition hook
   const {
@@ -260,7 +264,7 @@ export default function EmergencyServices({ onNavigate }: EmergencyServicesProps
 
   const handleSubmitEmergency = () => {
     // In a real app, this would trigger immediate legal assistance
-    alert('Emergency request submitted! A legal expert will contact you within 5 minutes.');
+    notify.success('Emergency request submitted! A legal expert will contact you within 5 minutes.');
   };
 
   return (

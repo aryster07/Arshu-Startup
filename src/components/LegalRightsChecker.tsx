@@ -246,21 +246,21 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
 
   return (
     <div className="h-full bg-slate-50">
-      <div className="max-w-7xl mx-auto px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-4">
         {nonLegalMessage ? (
           // Show simple message for non-legal content
-          <Card className="p-8 mb-8 text-center">
+          <Card className="p-3 lg:p-6 mb-4 lg:mb-6 text-center">
             <div className="max-w-2xl mx-auto">
-              <AlertTriangle className="h-16 w-16 text-amber-500 mx-auto mb-6" />
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Legal Assistance Only</h2>
-              <p className="text-lg text-slate-600 mb-6">
+              <AlertTriangle className="h-12 w-12 lg:h-16 lg:w-16 text-amber-500 mx-auto mb-4 lg:mb-6" />
+              <h2 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3 lg:mb-4">Legal Assistance Only</h2>
+              <p className="text-base lg:text-lg text-slate-600 mb-4 lg:mb-6">
                 {nonLegalMessage}
               </p>
               <div className="space-y-3">
                 <p className="text-slate-500">
                   <strong>Examples of legal questions I can help with:</strong>
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-600">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 text-sm text-slate-600">
                   <div>• "My landlord won't return my deposit"</div>
                   <div>• "I was wrongfully terminated"</div>
                   <div>• "Someone damaged my property"</div>
@@ -274,22 +274,22 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                   setNonLegalMessage('');
                   setAnalysisText('');
                 }}
-                className="mt-6 bg-blue-600 hover:bg-blue-700"
+                className="mt-4 lg:mt-6 bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
               >
                 Ask Legal Question
               </Button>
             </div>
           </Card>
         ) : !analysisResult ? (
-          <Card className="p-8 mb-8">
-            <div className="space-y-6">
+          <Card className="p-3 lg:p-6 mb-4 lg:mb-6">
+            <div className="space-y-4 lg:space-y-6">
               {/* Language Selection */}
-              <div className="mb-6">
-                <label className="block text-lg font-semibold text-slate-900 mb-4">
+              <div className="mb-3 lg:mb-4">
+                <label className="block text-base lg:text-lg font-semibold text-slate-900 mb-2 lg:mb-3">
                   Select Language / भाषा चुनें
                 </label>
                 <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
-                  <SelectTrigger className="w-64">
+                  <SelectTrigger className="w-full sm:w-64">
                     <SelectValue placeholder="Select Language" />
                   </SelectTrigger>
                   <SelectContent>
@@ -307,7 +307,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
 
               {/* Input Section */}
               <div>
-                <label className="block text-lg font-semibold text-slate-900 mb-4">
+                <label className="block text-base lg:text-lg font-semibold text-slate-900 mb-3 lg:mb-4">
                   {getGeminiLanguageCode(selectedLanguage) === 'hi'
                     ? 'अपना कानूनी मुद्दा बताएं'
                     : 'Describe Your Legal Issue'}
@@ -316,7 +316,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                   <Textarea
                     placeholder={getGeminiLanguageCode(selectedLanguage) === 'hi'
                       ? "अपनी स्थिति का विस्तार से वर्णन करें। संबंधित तारीखें, संबंधित पक्ष, और कोई भी दस्तावेज़ या सबूत शामिल करें... (विश्लेषण के लिए Enter दबाएं)"
-                      : "Explain your situation in detail. Include relevant dates, parties involved, and any documents or evidence you have... (Press Enter to analyze)"
+                      : "Explain your situation in detail. "
                     }
                     value={analysisText + (interimTranscript ? ` ${interimTranscript}` : '')}
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -336,27 +336,27 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                         console.log('❌ Enter key conditions not met - key:', e.key, 'shift:', e.shiftKey, 'analyzing:', isAnalyzing, 'hasText:', !!currentValue.trim());
                       }
                     }}
-                    className="min-h-[150px] pr-24 text-base"
+                    className="min-h-[120px] lg:min-h-[150px] pr-12 sm:pr-16 lg:pr-24 text-base touch-manipulation"
                   />
-                  {/* Voice and Analyze Buttons */}
-                  <div className="absolute right-2 top-2 flex space-x-2">
+                  {/* Voice and Analyze Buttons - Mobile optimized */}
+                  <div className="absolute right-2 top-2 flex flex-row space-x-1 sm:space-x-2">
                     <Button
                       onClick={handleVoiceToggle}
                       disabled={!isSpeechSupported}
                       size="sm"
-                      className={`p-2 ${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-700 hover:bg-slate-800'
-                        } ${!isSpeechSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`p-1.5 sm:p-2 h-8 w-8 sm:h-10 sm:w-10 ${isListening ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white'
+                        } ${!isSpeechSupported ? 'opacity-50 cursor-not-allowed' : ''} shadow-md`}
                       title={!isSpeechSupported ? 'Speech recognition not supported' :
                         isListening ? 'Stop recording' : 'Start voice input'}
                     >
-                      {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                      {isListening ? <MicOff className="h-3 w-3 sm:h-4 sm:w-4" /> : <Mic className="h-3 w-3 sm:h-4 sm:w-4" />}
                     </Button>
 
                     <Button
                       onClick={handleAnalysis}
                       disabled={!analysisText.trim() || isAnalyzing}
                       size="sm"
-                      className="p-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-1.5 sm:p-2 h-8 w-8 sm:h-10 sm:w-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                       title="Analyze legal issue"
                     >
                       {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
@@ -454,34 +454,36 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
             </div>
           </Card>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-4 sm:space-y-8">
             {/* Analysis Summary */}
-            <Card className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-slate-900">Analysis Results</h2>
+            <Card className="p-4 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Analysis Results</h2>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Report
+                  <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Download Report</span>
+                    <span className="sm:hidden">Download</span>
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Share className="h-4 w-4 mr-2" />
-                    Share
+                  <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                    <Share className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Share</span>
+                    <span className="sm:hidden">Share</span>
                   </Button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <div className="text-center">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${(analysisResult?.riskLevel === 'high') ? 'bg-red-100' :
+                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 ${(analysisResult?.riskLevel === 'high') ? 'bg-red-100' :
                     (analysisResult?.riskLevel === 'medium') ? 'bg-yellow-100' : 'bg-green-100'
                     }`}>
-                    <AlertTriangle className={`h-8 w-8 ${(analysisResult?.riskLevel === 'high') ? 'text-red-600' :
+                    <AlertTriangle className={`h-6 w-6 sm:h-8 sm:w-8 ${(analysisResult?.riskLevel === 'high') ? 'text-red-600' :
                       (analysisResult?.riskLevel === 'medium') ? 'text-yellow-600' : 'text-green-600'
                       }`} />
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Risk Level</h3>
-                  <p className={`text-lg font-bold capitalize ${(analysisResult?.riskLevel === 'high') ? 'text-red-600' :
+                  <h3 className="font-semibold text-slate-900 mb-1 text-sm sm:text-base">Risk Level</h3>
+                  <p className={`text-base sm:text-lg font-bold capitalize ${(analysisResult?.riskLevel === 'high') ? 'text-red-600' :
                     (analysisResult?.riskLevel === 'medium') ? 'text-yellow-600' : 'text-green-600'
                     }`}>
                     {analysisResult?.riskLevel || 'Unknown'}
@@ -489,28 +491,28 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                 </div>
 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Scale className="h-8 w-8 text-blue-600" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Scale className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Confidence</h3>
-                  <p className="text-lg font-bold text-blue-600">{analysisResult?.confidence || 0}%</p>
+                  <h3 className="font-semibold text-slate-900 mb-1 text-sm sm:text-base">Confidence</h3>
+                  <p className="text-base sm:text-lg font-bold text-blue-600">{analysisResult?.confidence || 0}%</p>
                   <Progress value={analysisResult?.confidence || 0} className="mt-2" />
                 </div>
 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle className="h-8 w-8 text-green-600" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Success Rate</h3>
-                  <p className="text-lg font-bold text-green-600">{analysisResult?.successRate || 'N/A'}</p>
+                  <h3 className="font-semibold text-slate-900 mb-1 text-sm sm:text-base">Success Rate</h3>
+                  <p className="text-base sm:text-lg font-bold text-green-600">{analysisResult?.successRate || 'N/A'}</p>
                 </div>
               </div>
 
               {/* Analysis Summary Text */}
               {(analysisResult?.summary || analysisResult?.analysis) && (
-                <div className="mt-8 p-6 bg-slate-50 rounded-lg">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3">Analysis Summary</h3>
-                  <p className="text-slate-700 leading-relaxed">
+                <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-slate-50 rounded-lg">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2 sm:mb-3">Analysis Summary</h3>
+                  <p className="text-slate-700 leading-relaxed text-sm sm:text-base">
                     {analysisResult?.summary || analysisResult?.analysis}
                   </p>
                 </div>
@@ -518,34 +520,47 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
             </Card>
 
             <Tabs defaultValue="violations" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="violations">Violations Found</TabsTrigger>
-                <TabsTrigger value="remedies">Legal Remedies</TabsTrigger>
-                <TabsTrigger value="cost">Cost & Timeline</TabsTrigger>
-                <TabsTrigger value="next-steps">Next Steps</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 text-xs sm:text-sm">
+                <TabsTrigger value="violations" className="text-xs sm:text-sm">
+                  <span className="hidden sm:inline">Violations Found</span>
+                  <span className="sm:hidden">Violations</span>
+                </TabsTrigger>
+                <TabsTrigger value="remedies" className="text-xs sm:text-sm">
+                  <span className="hidden sm:inline">Legal Remedies</span>
+                  <span className="sm:hidden">Remedies</span>
+                </TabsTrigger>
+                <TabsTrigger value="cost" className="text-xs sm:text-sm">
+                  <span className="hidden sm:inline">Cost & Timeline</span>
+                  <span className="sm:hidden">Cost</span>
+                </TabsTrigger>
+                <TabsTrigger value="next-steps" className="text-xs sm:text-sm">
+                  <span className="hidden sm:inline">Next Steps</span>
+                  <span className="sm:hidden">Steps</span>
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="violations" className="space-y-4">
+              <TabsContent value="violations" className="space-y-3 sm:space-y-4">
                 {(analysisResult?.violations || []).map((violation: any, index: number) => (
-                  <Card key={index} className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+                  <Card key={index} className="p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="text-lg font-semibold text-slate-900">{violation?.type || 'Legal Issue'}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-2">
+                          <h3 className="text-base sm:text-lg font-semibold text-slate-900">{violation?.type || 'Legal Issue'}</h3>
                           <Badge
                             variant={(violation?.severity === 'High') ? 'destructive' : 'secondary'}
+                            className="self-start sm:self-auto text-xs"
                           >
                             {violation?.severity || 'Medium'} Severity
                           </Badge>
                         </div>
-                        <p className="text-slate-600 mb-4">{violation?.description || 'Legal analysis completed.'}</p>
+                        <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">{violation?.description || 'Legal analysis completed.'}</p>
                       </div>
                     </div>
 
                     <div className="space-y-3">
                       <div>
-                        <h4 className="font-medium text-slate-900 mb-2">Applicable Laws:</h4>
-                        <div className="flex flex-wrap gap-2">
+                        <h4 className="font-medium text-slate-900 mb-2 text-sm sm:text-base">Applicable Laws:</h4>
+                        <div className="flex flex-wrap gap-1 sm:gap-2">
                           {(violation?.applicableLaws || []).map((law: string, lawIndex: number) => (
                             <Badge key={lawIndex} variant="outline" className="text-xs">
                               {law}
@@ -555,8 +570,8 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                       </div>
 
                       <div>
-                        <h4 className="font-medium text-slate-900 mb-2">Recommended Action:</h4>
-                        <p className="text-slate-600">{violation?.recommendedAction || 'Consult with legal expert'}</p>
+                        <h4 className="font-medium text-slate-900 mb-2 text-sm sm:text-base">Recommended Action:</h4>
+                        <p className="text-slate-600 text-sm sm:text-base">{violation?.recommendedAction || 'Consult with legal expert'}</p>
                       </div>
                     </div>
                   </Card>
@@ -564,16 +579,16 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
               </TabsContent>
 
               <TabsContent value="remedies" className="space-y-4">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Available Legal Remedies</h3>
-                  <div className="space-y-4">
+                <Card className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Available Legal Remedies</h3>
+                  <div className="space-y-3 sm:space-y-4">
                     {(analysisResult?.legalRemedies || analysisResult?.recommendedActions || []).map((remedy: string, index: number) => (
                       <div key={index} className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-                          <span className="text-blue-600 text-sm font-bold">{index + 1}</span>
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                          <span className="text-blue-600 text-xs sm:text-sm font-bold">{index + 1}</span>
                         </div>
                         <div className="flex-1">
-                          <p className="text-slate-700">{remedy}</p>
+                          <p className="text-slate-700 text-sm sm:text-base">{remedy}</p>
                         </div>
                       </div>
                     ))}
@@ -582,45 +597,45 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
               </TabsContent>
 
               <TabsContent value="cost" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-900 mb-4">Estimated Costs</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                  <Card className="p-4 sm:p-6">
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Estimated Costs</h3>
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex justify-between text-sm sm:text-base">
                         <span className="text-slate-600">Legal Fees:</span>
                         <span className="font-semibold">{analysisResult?.estimatedCost || 'Contact for estimate'}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between text-sm sm:text-base">
                         <span className="text-slate-600">Court Fees:</span>
                         <span className="font-semibold">₹2,000 - ₹5,000</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between text-sm sm:text-base">
                         <span className="text-slate-600">Documentation:</span>
                         <span className="font-semibold">₹1,000 - ₹3,000</span>
                       </div>
-                      <hr className="my-3" />
-                      <div className="flex justify-between text-lg font-bold">
+                      <hr className="my-2 sm:my-3" />
+                      <div className="flex justify-between text-base sm:text-lg font-bold">
                         <span>Total Estimated:</span>
                         <span className="text-blue-600">₹18,000 - ₹58,000</span>
                       </div>
                     </div>
                   </Card>
 
-                  <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-900 mb-4">Timeline</h3>
-                    <div className="space-y-4">
+                  <Card className="p-4 sm:p-6">
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Timeline</h3>
+                    <div className="space-y-3 sm:space-y-4">
                       <div className="flex items-center space-x-3">
-                        <Clock className="h-5 w-5 text-slate-500" />
-                        <span className="text-slate-700">Expected Duration: {analysisResult?.timeframe || '3-6 months'}</span>
+                        <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm sm:text-base">Expected Duration: {analysisResult?.timeframe || '3-6 months'}</span>
                       </div>
                       <div className="space-y-2">
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600">
                           <strong>Phase 1:</strong> Initial filing (1-2 weeks)
                         </div>
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600">
                           <strong>Phase 2:</strong> Response period (2-4 weeks)
                         </div>
-                        <div className="text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600">
                           <strong>Phase 3:</strong> Resolution/Hearing (2-4 months)
                         </div>
                       </div>
@@ -630,40 +645,40 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
               </TabsContent>
 
               <TabsContent value="next-steps" className="space-y-4">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-6">Recommended Next Steps</h3>
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                <Card className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-4 sm:mb-6">Recommended Next Steps</h3>
+                  <div className="space-y-4 sm:space-y-6">
+                    <div className="flex items-start space-x-3 sm:space-x-4">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-base flex-shrink-0">1</div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 mb-2">Gather Documentation</h4>
-                        <p className="text-slate-600 mb-3">Collect all relevant documents, receipts, communications, and evidence related to your case.</p>
-                        <Button variant="outline" size="sm">
-                          <FileText className="h-4 w-4 mr-2" />
+                        <h4 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">Gather Documentation</h4>
+                        <p className="text-slate-600 mb-3 text-xs sm:text-sm">Collect all relevant documents, receipts, communications, and evidence related to your case.</p>
+                        <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                          <FileText className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                           Document Checklist
                         </Button>
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="flex items-start space-x-3 sm:space-x-4">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-base flex-shrink-0">2</div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 mb-2">Legal Consultation</h4>
-                        <p className="text-slate-600 mb-3">Schedule a consultation with a qualified lawyer specializing in your case type.</p>
-                        <Button className="bg-slate-900 hover:bg-slate-800">
-                          <Users className="h-4 w-4 mr-2" />
+                        <h4 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">Legal Consultation</h4>
+                        <p className="text-slate-600 mb-3 text-xs sm:text-sm">Schedule a consultation with a qualified lawyer specializing in your case type.</p>
+                        <Button className="bg-slate-900 hover:bg-slate-800 text-xs sm:text-sm" size="sm">
+                          <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                           Find Lawyer
                         </Button>
                       </div>
                     </div>
 
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="flex items-start space-x-3 sm:space-x-4">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-base flex-shrink-0">3</div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 mb-2">File Formal Complaint</h4>
-                        <p className="text-slate-600 mb-3">Based on legal advice, proceed with filing the appropriate complaint or legal notice.</p>
-                        <Button variant="outline" size="sm">
-                          <Lightbulb className="h-4 w-4 mr-2" />
+                        <h4 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">File Formal Complaint</h4>
+                        <p className="text-slate-600 mb-3 text-xs sm:text-sm">Based on legal advice, proceed with filing the appropriate complaint or legal notice.</p>
+                        <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                          <Lightbulb className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                           Complaint Guide
                         </Button>
                       </div>
@@ -671,14 +686,14 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                   </div>
                 </Card>
 
-                <Card className="p-6 bg-blue-50 border-blue-200">
+                <Card className="p-4 sm:p-6 bg-blue-50 border-blue-200">
                   <div className="text-center">
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Need Immediate Help?</h3>
-                    <p className="text-slate-600 mb-4">
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">Need Immediate Help?</h3>
+                    <p className="text-slate-600 mb-4 text-sm sm:text-base">
                       Our legal experts are available 24/7 for emergency consultation
                     </p>
-                    <Button size="lg" className="bg-red-600 hover:bg-red-700" onClick={() => onNavigate('emergency')}>
-                      <Phone className="h-5 w-5 mr-2" />
+                    <Button size="sm" className="bg-red-600 hover:bg-red-700 text-xs sm:text-sm" onClick={() => onNavigate('emergency')}>
+                      <Phone className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
                       Emergency Legal Help
                     </Button>
                   </div>

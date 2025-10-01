@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useNotification } from '../hooks/useNotification';
 
 interface ContactPageProps {
   onNavigate?: (screen: string) => void;
@@ -20,6 +21,9 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
     urgency: ''
   });
 
+  // Notification hook for user feedback
+  const notify = useNotification();
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -28,7 +32,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Here you would typically send the data to your backend
-    alert('Thank you for your inquiry! We will contact you within 24 hours.');
+    notify.success('Thank you for your inquiry! We will contact you within 24 hours.');
     setFormData({
       name: '',
       email: '',

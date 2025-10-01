@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
@@ -14,9 +14,12 @@ import {
   Scale,
   MessageSquare,
   Calendar,
-  Bell
+  Bell,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -26,9 +29,39 @@ interface AppLayoutProps {
 export default function AppLayout({ children, userType }: AppLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check screen size on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Check if we're on the main dashboard (no back button needed)
   const isMainDashboard = location.pathname === `/dashboard/${userType}`;
+
+  // Close mobile menu when navigation occurs
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (isMobileMenuOpen && !(event.target as Element).closest('.mobile-menu')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [isMobileMenuOpen]);
   
   // Get current page title based on path
   const getPageTitle = () => {
@@ -74,11 +107,167 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
     navigate('/');
   };
 
+  // Mobile-first layout structure
+  if (isMobile) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col">
+        {/* Mobile Header */}
+        <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Left side - Menu button and back button */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+              
+              {!isMainDashboard && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate(`/dashboard/${userType}`)}
+                  className="h-9 w-9"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              )}
+            </div>
+
+            {/* Center - Page title */}
+            <div className="flex-1 text-center px-2">
+              <h1 className="text-base font-semibold text-slate-900 truncate">
+                {getPageTitle()}
+              </h1>
+            </div>
+
+            {/* Right side - Notifications and profile */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative h-9 w-9"
+              >
+                <Bell className="h-4 w-4" />
+                <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </Button>
+              
+              <div className="w-8 h-8 bg-slate-900 rounded-full flex items-center justify-center">
+                <User className="h-4 w-4 text-white" />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Mobile Sidebar Overlay */}
+        {isMobileMenuOpen && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            <div className="mobile-menu fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl transform transition-transform duration-300">
+              {/* Sidebar Header */}
+              <div className="p-4 border-b border-slate-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-slate-900 rounded-lg">
+                      <Scale className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="font-bold text-lg text-slate-900">LawB</h1>
+                      <p className="text-xs text-slate-600 capitalize">{userType} Portal</p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Navigation */}
+              <nav className="flex-1 p-4 overflow-y-auto">
+                <ul className="space-y-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    
+                    return (
+                      <li key={item.id}>
+                        <Link
+                          to={item.path}
+                          className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                            isActive
+                              ? 'bg-slate-900 text-white'
+                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                          }`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Icon className="h-5 w-5 flex-shrink-0" />
+                          <span className="font-medium">{item.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+
+              {/* Sidebar Footer */}
+              <div className="p-4 border-t border-slate-200">
+                <div className="space-y-1">
+                  <Link
+                    to="/dashboard/profile"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5 flex-shrink-0" />
+                    <span className="font-medium">Profile</span>
+                  </Link>
+                  <Link
+                    to="/dashboard/settings"
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Settings className="h-5 w-5 flex-shrink-0" />
+                    <span className="font-medium">Settings</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-700 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="h-5 w-5 flex-shrink-0" />
+                    <span className="font-medium">Logout</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4">
+            {children}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Desktop layout (existing design preserved)
   return (
     <div className="h-screen bg-slate-50 flex overflow-hidden">
-      {/* Static Sidebar - Fixed Height, No Scroll */}
+      {/* Desktop Sidebar */}
       <div className="w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 h-full overflow-hidden">
-        {/* Sidebar Header - Fixed */}
+        {/* Sidebar Header */}
         <div className="p-6 border-b border-slate-200 shrink-0">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-slate-900 rounded-lg">
@@ -91,8 +280,8 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
           </div>
         </div>
 
-        {/* Navigation - Static, No Scroll */}
-        <nav className="flex-1 p-4 overflow-hidden">
+        {/* Navigation */}
+        <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -108,7 +297,7 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
                         : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-5 w-5 flex-shrink-0" />
                     <span className="font-medium">{item.label}</span>
                   </Link>
                 </li>
@@ -117,37 +306,37 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
           </ul>
         </nav>
 
-        {/* Sidebar Footer - Fixed */}
+        {/* Sidebar Footer */}
         <div className="p-4 border-t border-slate-200 shrink-0">
           <div className="space-y-2">
             <Link
               to="/dashboard/profile"
               className="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
             >
-              <User className="h-5 w-5" />
+              <User className="h-5 w-5 flex-shrink-0" />
               <span className="font-medium">Profile</span>
             </Link>
             <Link
               to="/dashboard/settings"
               className="flex items-center space-x-3 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-5 w-5 flex-shrink-0" />
               <span className="font-medium">Settings</span>
             </Link>
             <button
               onClick={handleLogout}
               className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-red-700 hover:bg-red-50 transition-colors"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5 flex-shrink-0" />
               <span className="font-medium">Logout</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content - Right Frame */}
+      {/* Desktop Main Content */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Top Bar - Fixed Header */}
+        {/* Desktop Top Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-6 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -179,10 +368,10 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative"
+                className="relative h-9 w-9"
               >
                 <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full text-xs"></span>
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
               </Button>
               
               <div className="flex items-center space-x-3">
@@ -198,10 +387,12 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
           </div>
         </header>
 
-        {/* Main Content Area - Only This Scrolls */}
+        {/* Desktop Main Content */}
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
           <div className="p-6">
-            {children}
+            <ErrorBoundary level="section">
+              {children}
+            </ErrorBoundary>
           </div>
         </main>
       </div>

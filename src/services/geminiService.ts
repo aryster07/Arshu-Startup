@@ -549,7 +549,7 @@ FORMAT YOUR RESPONSE AS JSON:
 // Configuration and initialization
 const config = {
   geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY || '',
-  geminiModel: import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-pro',
+  geminiModel: import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash',
   enableAI: import.meta.env.VITE_ENABLE_AI_FEATURES === 'true',
   apiTimeout: parseInt(import.meta.env.VITE_API_TIMEOUT || '30000'),
   rateLimit: parseInt(import.meta.env.VITE_API_RATE_LIMIT || '60')

@@ -4,6 +4,7 @@ import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Users, Star, MapPin, Clock, DollarSign, Phone, MessageCircle } from 'lucide-react';
 import { getLawyersBySpecialization, Lawyer } from '../../constants/legal/lawyers';
+import { useNotification } from '../../hooks/useNotification';
 
 interface LawyerRecommendationProps {
   specialization: string;
@@ -13,6 +14,9 @@ interface LawyerRecommendationProps {
 export function LawyerRecommendation({ specialization, className = "" }: LawyerRecommendationProps) {
   const [showLawyers, setShowLawyers] = useState(false);
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+
+  // Notification hook for user feedback
+  const notify = useNotification();
 
   console.log('👨‍⚖️ LawyerRecommendation component rendered with specialization:', specialization);
 
@@ -26,7 +30,7 @@ export function LawyerRecommendation({ specialization, className = "" }: LawyerR
 
   const handleContactLawyer = (lawyer: Lawyer) => {
     // In a real app, this would open a contact form or initiate communication
-    alert(`Contact ${lawyer.name}: This feature will be implemented to connect you directly with the lawyer.`);
+    notify.info(`Contact ${lawyer.name}: This feature will be implemented to connect you directly with the lawyer.`);
   };
 
   if (!showLawyers) {

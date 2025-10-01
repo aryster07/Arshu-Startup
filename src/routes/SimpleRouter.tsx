@@ -6,10 +6,10 @@ import { ROUTES } from '../constants/routes';
 import DefaultLayout from '../layouts/DefaultLayout';
 import AppLayout from '../layouts/AppLayout';
 
-// Pages
-import HomePage from '../pages/HomePage';
-import ClientDashboardPage from '../pages/dashboard/ClientDashboardPageRefactored';
-import LawyerDashboardPage from '../pages/dashboard/LawyerDashboardPage';
+// Responsive Pages
+import HomePageResponsive from '../pages/HomePageResponsive';
+import ClientDashboardResponsive from '../pages/dashboard/ClientDashboardResponsive';
+import LawyerDashboardResponsive from '../pages/dashboard/LawyerDashboardResponsive';
 
 // Static pages - using existing components
 import AboutPage from '../components/AboutPage';
@@ -125,11 +125,11 @@ export default function SimpleRouter() {
   return (
     <Routes>
       {/* Homepage */}
-      <Route path={ROUTES.HOME} element={<HomePage />} />
+      <Route path={ROUTES.HOME} element={<HomePageResponsive />} />
       
       {/* Dashboard routes */}
-      <Route path={ROUTES.CLIENT_DASHBOARD} element={<ClientDashboardPage />} />
-      <Route path="/dashboard/lawyer" element={<LawyerDashboardPage />} />
+      <Route path={ROUTES.CLIENT_DASHBOARD} element={<ClientDashboardResponsive />} />
+      <Route path="/dashboard/lawyer" element={<LawyerDashboardResponsive />} />
       
       {/* Client Portal Services */}
       <Route path="/dashboard/client/legal-rights" element={<PortalLegalRightsPage userType="client" />} />

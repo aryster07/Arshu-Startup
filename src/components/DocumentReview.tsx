@@ -210,56 +210,54 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
 
   return (
     <div className="h-full bg-slate-50">
-      <div className="max-w-7xl mx-auto px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-4">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Upload New Document */}
-          <div className="lg:col-span-2">
-            <Card className="p-8">
-              <div className="flex items-center justify-between mb-6">
+        {/* Responsive Layout: Single column on mobile, main + sidebar on desktop */}
+        <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 xl:gap-6">
+          {/* Main Content Area - Upload New Document */}
+          <div className="flex-1 lg:w-2/3">
+            <Card className="p-3 lg:p-4 xl:p-6">
+              <div className="flex items-center mb-4 lg:mb-6">
                 <div className="flex items-center">
-                  <Zap className="h-6 w-6 text-blue-600 mr-2" />
-                  <h2 className="text-2xl font-bold text-slate-900">AI Document Analysis</h2>
+                  <Zap className="h-5 w-5 lg:h-6 lg:w-6 text-blue-600 mr-2" />
+                  <h2 className="text-lg lg:text-xl xl:text-2xl font-bold text-slate-900">AI Document Analysis</h2>
                 </div>
-                <Button 
-                  onClick={() => {
-                    if (selectedDocument && !isAnalyzing) {
-                      document.getElementById('file-upload')?.click();
-                    } else if (!selectedDocument) {
-                      alert('Please select a document type first!');
-                    }
-                  }}
-                  className={`${!selectedDocument ? 'opacity-75' : 'hover:bg-blue-700'} bg-blue-600 text-white`}
-                  disabled={isAnalyzing}
-                >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Quick Upload
-                </Button>
               </div>
 
               {/* Document Type Selection */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-900 mb-3">
+              <div className="mb-3 lg:mb-4">
+                <label className="block text-sm lg:text-base font-medium text-slate-900 mb-2">
                   1. Select Document Type
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-3">
                   {documentTypes.map((type) => (
                     <div
                       key={type.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all ${selectedDocument === type.id
-                        ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200'
-                        : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                      className={`group p-3 border rounded-lg cursor-pointer transition-all duration-200 text-center transform hover:scale-105 ${selectedDocument === type.id
+                        ? 'border-blue-500 bg-blue-50 shadow-lg ring-2 ring-blue-200 scale-105'
+                        : 'border-slate-200 hover:border-blue-300 hover:shadow-md hover:bg-slate-50'
                         }`}
                       onClick={() => setSelectedDocument(type.id)}
                     >
-                      <div className="flex items-center mb-2">
-                        {type.icon}
-                        <h3 className="font-medium text-slate-900 ml-2">{type.name}</h3>
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className={`transition-colors duration-200 ${
+                          selectedDocument === type.id 
+                            ? 'text-blue-600' 
+                            : 'text-slate-600 group-hover:text-blue-500'
+                        }`}>
+                          {type.icon}
+                        </div>
+                        <div>
+                          <h3 className={`font-medium text-xs lg:text-sm leading-tight transition-colors duration-200 ${
+                            selectedDocument === type.id 
+                              ? 'text-blue-900' 
+                              : 'text-slate-900 group-hover:text-blue-800'
+                          }`}>{type.name}</h3>
+                        </div>
                         {selectedDocument === type.id && (
-                          <CheckCircle className="h-4 w-4 text-blue-600 ml-auto" />
+                          <CheckCircle className="h-4 w-4 text-blue-600 animate-pulse" />
                         )}
                       </div>
-                      <p className="text-sm text-slate-600">{type.description}</p>
                     </div>
                   ))}
                 </div>
@@ -267,11 +265,15 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
 
               {/* File Upload Area */}
               <div className="flex-grow flex flex-col">
-                <label className="block text-sm font-medium text-slate-900 mb-2">2. Upload Document</label>
+                <label className="block text-sm lg:text-base font-medium text-slate-900 mb-2">2. Upload Document</label>
                 <div 
-                  className={`border-2 border-dashed rounded-lg p-8 text-center transition-all flex-grow flex flex-col justify-center ${
-                    isAnalyzing ? 'border-blue-300 bg-blue-50' : 'border-slate-300 hover:border-blue-400'
-                  } ${selectedDocument ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                  className={`relative border-2 border-dashed rounded-xl p-6 lg:p-8 text-center transition-all duration-300 flex-grow flex flex-col justify-center min-h-[200px] lg:min-h-[250px] ${
+                    isAnalyzing 
+                      ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-blue-100' 
+                      : selectedDocument 
+                        ? 'border-slate-300 hover:border-blue-400 hover:bg-slate-50 cursor-pointer' 
+                        : 'border-slate-200 bg-slate-50 cursor-not-allowed'
+                  }`}
                   onClick={() => {
                     if (selectedDocument && !isAnalyzing) {
                       document.getElementById('file-upload')?.click();
@@ -280,16 +282,16 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
                   onDragOver={(e) => {
                     e.preventDefault();
                     if (selectedDocument) {
-                      e.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
+                      e.currentTarget.classList.add('border-blue-500', 'bg-blue-50', 'scale-105');
                     }
                   }}
                   onDragLeave={(e) => {
                     e.preventDefault();
-                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50', 'scale-105');
                   }}
                   onDrop={(e) => {
                     e.preventDefault();
-                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+                    e.currentTarget.classList.remove('border-blue-500', 'bg-blue-50', 'scale-105');
                     if (selectedDocument && !isAnalyzing) {
                       const files = e.dataTransfer.files;
                       if (files && files[0]) {
@@ -300,19 +302,37 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
                   }}
                 >
                   {isAnalyzing ? (
-                    <div className="flex flex-col items-center">
-                      <Brain className="h-10 w-10 text-blue-600 mx-auto mb-3 animate-pulse" />
-                      <p className="text-blue-700 font-medium mb-1">AI Analysis in Progress...</p>
-                      <p className="text-xs text-blue-600">Analyzing clauses and potential risks</p>
-                      <div className="mt-3 w-32"><Progress value={66} className="h-2" /></div>
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="relative">
+                        <Brain className="h-12 w-12 lg:h-16 lg:w-16 text-blue-600 mx-auto animate-pulse" />
+                        <div className="absolute inset-0 rounded-full border-2 border-blue-300 border-t-blue-600 animate-spin"></div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-blue-800 font-semibold text-base lg:text-lg">AI Analysis in Progress</p>
+                        <p className="text-blue-600 text-sm lg:text-base">Analyzing document structure and legal compliance</p>
+                        <div className="w-48 lg:w-64 mx-auto">
+                          <Progress value={66} className="h-2 bg-blue-200" />
+                        </div>
+                      </div>
                     </div>
                   ) : (
-                    <>
-                      <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                      <p className="text-slate-600 text-lg font-medium mb-2">
-                        {selectedDocument ? 'Drop document here or click to upload' : 'Select document type first'}
-                      </p>
-                      <p className="text-xs text-slate-500 mb-4">PDF, DOC, DOCX up to 10MB</p>
+                    <div className="space-y-6">
+                      <div className={`transition-all duration-300 ${selectedDocument ? 'scale-100 opacity-100' : 'scale-95 opacity-75'}`}>
+                        <Upload className={`h-12 w-12 lg:h-16 lg:w-16 mx-auto mb-4 transition-colors duration-300 ${
+                          selectedDocument ? 'text-blue-500' : 'text-slate-400'
+                        }`} />
+                        <div className="space-y-2">
+                          <p className={`text-base lg:text-lg font-semibold transition-colors duration-300 ${
+                            selectedDocument ? 'text-slate-800' : 'text-slate-500'
+                          }`}>
+                            {selectedDocument ? 'Drop your document here or click to upload' : 'Select document type first'}
+                          </p>
+                          <p className="text-sm text-slate-500">
+                            PDF, DOC, DOCX • Maximum file size: 10MB
+                          </p>
+                        </div>
+                      </div>
+                      
                       <input 
                         type="file" 
                         accept=".pdf,.doc,.docx" 
@@ -321,58 +341,67 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
                         onChange={handleFileUpload} 
                         disabled={!selectedDocument || isAnalyzing} 
                       />
-                      <Button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (selectedDocument && !isAnalyzing) {
-                            document.getElementById('file-upload')?.click();
-                          }
-                        }}
-                        className={`${!selectedDocument ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} bg-blue-600 text-white px-6 py-2`} 
-                        disabled={!selectedDocument || isAnalyzing}
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Upload Document
-                      </Button>
-                      {!selectedDocument && (
-                        <p className="text-xs text-red-500 mt-3">
-                          ⚠️ Please select a document type above first
-                        </p>
-                      )}
-                    </>
+                      
+                      <div className="space-y-3">
+                        <Button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (selectedDocument && !isAnalyzing) {
+                              document.getElementById('file-upload')?.click();
+                            }
+                          }}
+                          className={`w-full sm:w-auto transition-all duration-300 ${
+                            selectedDocument 
+                              ? 'bg-blue-600 hover:bg-blue-700 hover:scale-105 shadow-md hover:shadow-lg' 
+                              : 'bg-slate-400 cursor-not-allowed'
+                          } text-white px-6 lg:px-8 py-3 lg:py-4 text-sm lg:text-base font-medium rounded-lg`} 
+                          disabled={!selectedDocument || isAnalyzing}
+                        >
+                          <Upload className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
+                          Choose File to Upload
+                        </Button>
+                        
+                        {!selectedDocument && (
+                          <div className="flex items-center justify-center space-x-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-lg border border-amber-200">
+                            <AlertTriangle className="h-4 w-4" />
+                            <p className="text-sm font-medium">Please select a document type above first</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
 
               {/* AI Analysis Results */}
               {analysisResult && (
-                <div className="mt-8 space-y-6">
-                  <div className="border-t pt-6">
+                <div className="mt-6 lg:mt-8 space-y-4 lg:space-y-6">
+                  <div className="border-t pt-4 lg:pt-6">
                     <div className="flex items-center mb-4">
-                      <CheckCircle className="h-6 w-6 text-green-600 mr-2" />
-                      <h3 className="text-xl font-bold text-slate-900">Analysis Complete</h3>
+                      <CheckCircle className="h-5 w-5 lg:h-6 lg:w-6 text-green-600 mr-2" />
+                      <h3 className="text-lg lg:text-xl font-bold text-slate-900">Analysis Complete</h3>
                     </div>
 
                     {/* Overall Score & Risk Level */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <Card className="p-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 lg:mb-6">
+                      <Card className="p-3 lg:p-4">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-slate-600">Overall Score</p>
-                            <p className="text-2xl font-bold text-slate-900">{analysisResult.overallScore}/100</p>
+                            <p className="text-xs lg:text-sm text-slate-600">Overall Score</p>
+                            <p className="text-xl lg:text-2xl font-bold text-slate-900">{analysisResult.overallScore}/100</p>
                           </div>
-                          <Target className="h-8 w-8 text-blue-600" />
+                          <Target className="h-6 w-6 lg:h-8 lg:w-8 text-blue-600" />
                         </div>
                       </Card>
-                      <Card className="p-4">
+                      <Card className="p-3 lg:p-4">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-sm text-slate-600">Risk Level</p>
+                            <p className="text-xs lg:text-sm text-slate-600">Risk Level</p>
                             <Badge className={getRiskColor(analysisResult.riskLevel)}>
                               {analysisResult.riskLevel.toUpperCase()}
                             </Badge>
                           </div>
-                          <AlertTriangle className="h-8 w-8 text-orange-600" />
+                          <AlertTriangle className="h-6 w-6 lg:h-8 lg:w-8 text-orange-600" />
                         </div>
                       </Card>
                     </div>
@@ -451,58 +480,58 @@ Please analyze this ${documentType} document for legal compliance, risks, and re
             </Card>
           </div>
 
-          {/* AI Features & Benefits */}
-          <div className="space-y-6">
-            <Card className="p-6">
+          {/* AI Features & Benefits Sidebar - Hidden on mobile, visible on desktop */}
+          <div className="hidden lg:block lg:w-1/3 space-y-4 lg:space-y-6">
+            <Card className="p-4 lg:p-6">
               <div className="flex items-center mb-4">
-                <Brain className="h-5 w-5 text-purple-600 mr-2" />
-                <h3 className="text-lg font-semibold text-slate-900">AI Analysis Features</h3>
+                <Brain className="h-4 w-4 lg:h-5 lg:w-5 text-purple-600 mr-2" />
+                <h3 className="text-base lg:text-lg font-semibold text-slate-900">AI Analysis Features</h3>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3 lg:space-y-4">
                 <div className="flex items-start space-x-3">
-                  <Zap className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <Zap className="h-4 w-4 lg:h-5 lg:w-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Instant Analysis</p>
-                    <p className="text-sm text-slate-600">Get results in 3-5 seconds</p>
+                    <p className="font-medium text-slate-900 text-sm lg:text-base">Instant Analysis</p>
+                    <p className="text-xs lg:text-sm text-slate-600">Get results in 3-5 seconds</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <Target className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <Target className="h-4 w-4 lg:h-5 lg:w-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Risk Assessment</p>
-                    <p className="text-sm text-slate-600">Identify potential legal issues</p>
+                    <p className="font-medium text-slate-900 text-sm lg:text-base">Risk Assessment</p>
+                    <p className="text-xs lg:text-sm text-slate-600">Identify potential legal issues</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <MessageSquare className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                  <MessageSquare className="h-4 w-4 lg:h-5 lg:w-5 text-orange-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Smart Recommendations</p>
-                    <p className="text-sm text-slate-600">Actionable improvement suggestions</p>
+                    <p className="font-medium text-slate-900 text-sm lg:text-base">Smart Recommendations</p>
+                    <p className="text-xs lg:text-sm text-slate-600">Actionable improvement suggestions</p>
                   </div>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200">
+            <Card className="p-4 lg:p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200">
               <div className="flex items-center mb-4">
-                <Shield className="h-5 w-5 text-blue-600 mr-2" />
-                <h3 className="text-lg font-semibold text-slate-900">Why Choose AI Review?</h3>
+                <Shield className="h-4 w-4 lg:h-5 lg:w-5 text-blue-600 mr-2" />
+                <h3 className="text-base lg:text-lg font-semibold text-slate-900">Why Choose AI Review?</h3>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-center text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+              <div className="space-y-2 lg:space-y-3">
+                <div className="flex items-center text-xs lg:text-sm">
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-green-600 mr-2" />
                   <span className="text-slate-700">100% Free Analysis</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                <div className="flex items-center text-xs lg:text-sm">
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-green-600 mr-2" />
                   <span className="text-slate-700">24/7 Availability</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                <div className="flex items-center text-xs lg:text-sm">
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-green-600 mr-2" />
                   <span className="text-slate-700">Comprehensive Reports</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
+                <div className="flex items-center text-xs lg:text-sm">
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-green-600 mr-2" />
                   <span className="text-slate-700">Expert Consultation Available</span>
                 </div>
               </div>

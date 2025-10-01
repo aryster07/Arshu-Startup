@@ -40,19 +40,19 @@ export default function Navbar() {
       title: 'All Services',
       description: 'Complete overview of our legal services',
       path: ROUTES.SERVICES,
-      icon: <Briefcase className="h-4 w-4" />
+      icon: <Briefcase className="h-3 w-3 lg:h-4 lg:w-4" />
     },
     {
       title: 'Legal Rights Checker',
       description: 'Check your legal rights and get guidance',
       path: ROUTES.LEGAL_RIGHTS,
-      icon: <Shield className="h-4 w-4" />
+      icon: <Shield className="h-3 w-3 lg:h-4 lg:w-4" />
     },
     {
       title: 'Consumer Rights',
       description: 'Consumer protection and rights assistance',
       path: ROUTES.CONSUMER_RIGHTS,
-      icon: <Users className="h-4 w-4" />
+      icon: <Users className="h-3 w-3 lg:h-4 lg:w-4" />
     },
     {
       title: 'Legal Notice Service',
@@ -158,18 +158,18 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Enhanced responsive design */}
         {isMenuOpen && (
-          <div className="md:hidden py-8 border-t border-slate-200">
-            <div className="space-y-6">
-              {/* Main Navigation */}
-              <div className="space-y-3">
+          <div className="md:hidden py-6 lg:py-8 border-t border-slate-200">
+            <div className="space-y-4 lg:space-y-6">
+              {/* Main Navigation - Mobile responsive */}
+              <div className="space-y-2 lg:space-y-3">
                 {mainNavItems.map((item) => (
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${isActive(item.path)
-                      ? 'text-blue-600 bg-blue-50 pt-8'
+                    className={`flex items-center space-x-3 px-3 lg:px-4 py-3 rounded-xl font-medium transition-all duration-200 text-sm lg:text-base ${isActive(item.path)
+                      ? 'text-blue-600 bg-blue-50'
                       : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
                       }`}
                   >

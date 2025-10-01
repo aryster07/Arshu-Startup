@@ -1,13 +1,14 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import RoleSelectionCard from '../components/RoleSelectionCard';
+
+// Import the current HomePage (we'll fix it)
+import DefaultLayout from '../layouts/DefaultLayout';
 import { useNavigation } from '../hooks/useNavigation';
 import { ROUTES } from '../constants/routes';
 import { Users, Scale, Shield, Clock, CheckCircle, Award, Users2, FileText } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
-export default function HomePage() {
+// Desktop HomePage Component
+function HomePageDesktop() {
   const { navigateTo } = useNavigation();
 
   const handleRoleSelection = (role: string) => {
@@ -37,9 +38,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      
+    <DefaultLayout>
       {/* Hero Section */}
       <section className="relative bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-8 py-24">
@@ -83,68 +82,65 @@ export default function HomePage() {
           </div>
 
           {/* Role Selection Cards */}
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            <RoleSelectionCard
-              title="Client Services"
-              subtitle="Legal Assistance & Consultation"
-              description="Access professional legal services with certified advocates specializing in various domains of law."
-              benefits={[
-                "Expert legal consultation and advice",
-                "Document preparation and review",
-                "Court representation coordination", 
-                "Case status tracking and updates",
-                "Direct communication with advocates"
-              ]}
-              icon={<Users className="h-8 w-8 text-slate-700" />}
-              buttonText="Access Client Portal"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+            <div 
               onClick={() => handleRoleSelection('client')}
-            />
-
-            <RoleSelectionCard
-              title="Legal Professional Portal"
-              subtitle="Advocate & Lawyer Platform"
-              description="Professional platform for legal practitioners to manage practice, connect with clients, and grow their business."
-              benefits={[
-                "Client acquisition and management",
-                "Practice management tools",
-                "Professional networking platform",
-                "Legal research and updates",
-                "Business development resources"
-              ]}
-              icon={<Scale className="h-8 w-8 text-slate-700" />}
-              buttonText="Professional Access"
-              onClick={() => handleRoleSelection('lawyer')}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Emergency Services Section */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="bg-slate-900 rounded-2xl p-12 text-center">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">Emergency Legal Services</h3>
-              <p className="text-slate-300 mb-8">
-                Immediate legal assistance available 24/7 for urgent matters requiring prompt professional intervention.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg"
-                  className="bg-red-600 hover:bg-red-700 text-white px-8"
-                  onClick={() => window.location.href = 'tel:+916230244977'}
-                >
-                  Emergency Hotline: +91 62302-44977
-                </Button>
-                <Button 
-                  size="lg"
-                  variant="outline" 
-                  className="border-slate-300 text-slate-900 bg-white hover:bg-slate-50 px-8"
-                  onClick={() => navigateToScreen('emergency')}
-                >
-                  Emergency Services
+              className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 cursor-pointer group"
+            >
+              <div className="text-center space-y-6">
+                <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto group-hover:bg-blue-200 transition-colors">
+                  <Users className="h-8 w-8 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-slate-900 mb-2">I'm a Client</h3>
+                  <p className="text-slate-600">Get legal assistance, consultation, and professional guidance for your legal matters</p>
+                </div>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Access Client Portal
                 </Button>
               </div>
+            </div>
+
+            <div 
+              onClick={() => handleRoleSelection('lawyer')}
+              className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-green-200 transition-all duration-300 cursor-pointer group"
+            >
+              <div className="text-center space-y-6">
+                <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto group-hover:bg-green-200 transition-colors">
+                  <Scale className="h-8 w-8 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-slate-900 mb-2">I'm a Lawyer</h3>
+                  <p className="text-slate-600">Access professional tools, manage cases, and connect with clients efficiently</p>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  Access Lawyer Portal
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="text-center">
+            <p className="text-slate-600 mb-6">
+              Need immediate assistance? Access our quick legal services
+            </p>
+            <div className="flex items-center justify-center space-x-4">
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                onClick={() => navigateToScreen('legal-rights')}
+              >
+                Check Legal Rights
+              </Button>
+              <Button
+                size="lg"
+                variant="outline" 
+                className="border-slate-300 text-slate-900 bg-white hover:bg-slate-50 px-8"
+                onClick={() => navigateToScreen('emergency')}
+              >
+                Emergency Services
+              </Button>
             </div>
           </div>
         </div>
@@ -161,32 +157,30 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Award className="h-10 w-10 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+              <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                <Award className="h-7 w-7 text-blue-600" />
               </div>
-              <h4 className="text-xl font-semibold text-slate-900 mb-4">Certified Legal Professionals</h4>
+              <h4 className="text-xl font-semibold text-slate-900 mb-4">Certified Professionals</h4>
               <p className="text-slate-600 leading-relaxed">
-                All legal professionals undergo rigorous certification processes and maintain specialized expertise 
-                across criminal, civil, family, and corporate law domains.
+                All our legal professionals are certified advocates with extensive experience in their respective domains and continuous professional development.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Users2 className="h-10 w-10 text-white" />
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+              <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                <Users2 className="h-7 w-7 text-green-600" />
               </div>
-              <h4 className="text-xl font-semibold text-slate-900 mb-4">24/7 Professional Support</h4>
+              <h4 className="text-xl font-semibold text-slate-900 mb-4">Comprehensive Services</h4>
               <p className="text-slate-600 leading-relaxed">
-                Round-the-clock availability ensures immediate access to legal guidance with qualified professionals 
-                ready to assist with urgent legal matters and consultations.
+                From legal consultations to document reviews, we provide end-to-end legal services covering all major areas of law and legal requirements.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <FileText className="h-10 w-10 text-white" />
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+              <div className="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                <FileText className="h-7 w-7 text-purple-600" />
               </div>
               <h4 className="text-xl font-semibold text-slate-900 mb-4">Current Legal Knowledge</h4>
               <p className="text-slate-600 leading-relaxed">
@@ -197,8 +191,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </DefaultLayout>
   );
+}
+
+// Responsive HomePage Component - Now just returns desktop version
+export default function HomePageResponsive() {
+  return <HomePageDesktop />;
 }
