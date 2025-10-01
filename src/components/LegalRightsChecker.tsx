@@ -88,9 +88,9 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
   const legalCategories = [
     { id: 'criminal', name: 'Criminal Law', icon: <Shield className="h-5 w-5" /> },
     { id: 'civil', name: 'Civil Rights', icon: <Users className="h-5 w-5" /> },
-    { id: 'consumer', name: 'Consumer Protection', icon: <FileText className="h-5 w-5" /> },
-    { id: 'employment', name: 'Employment Law', icon: <Scale className="h-5 w-5" /> },
-    { id: 'property', name: 'Property Rights', icon: <BookOpen className="h-5 w-5" /> },
+    { id: 'consumer', name: 'Consumer Law', icon: <FileText className="h-5 w-5" /> },
+    { id: 'employment', name: 'Labor Law', icon: <Scale className="h-5 w-5" /> },
+    { id: 'property', name: 'Property Law', icon: <BookOpen className="h-5 w-5" /> },
     { id: 'family', name: 'Family Law', icon: <Users className="h-5 w-5" /> }
   ];
 
@@ -281,7 +281,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
             </div>
           </Card>
         ) : !analysisResult ? (
-          <Card className="p-3 lg:p-6 mb-4 lg:mb-6">
+          <Card className="p-3 lg:p-6 mb-4 lg:mb-6 overflow-hidden">
             <div className="space-y-4 lg:space-y-6">
               {/* Language Selection */}
               <div className="mb-3 lg:mb-4">
@@ -413,14 +413,16 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                 <label className="block text-lg font-semibold text-slate-900 mb-4">
                   Select Relevant Legal Categories
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
                   {legalCategories.map((category) => (
-                    <Card key={category.id} className="p-4 cursor-pointer hover:bg-slate-50 transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-slate-100 rounded-lg">
+                    <Card key={category.id} className="p-3 lg:p-4 cursor-pointer hover:bg-slate-50 transition-colors">
+                      <div className="flex items-center space-x-2 lg:space-x-3">
+                        <div className="p-1.5 lg:p-2 bg-slate-100 rounded-lg flex-shrink-0">
                           {category.icon}
                         </div>
-                        <span className="font-medium text-slate-900">{category.name}</span>
+                        <span className="font-medium text-slate-900 text-sm lg:text-base leading-tight break-words">
+                          {category.name}
+                        </span>
                       </div>
                     </Card>
                   ))}
@@ -456,7 +458,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
         ) : (
           <div className="space-y-4 sm:space-y-8">
             {/* Analysis Summary */}
-            <Card className="p-4 sm:p-8">
+            <Card className="p-4 sm:p-8 overflow-hidden">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Analysis Results</h2>
                 <div className="flex space-x-2">
@@ -541,19 +543,19 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
 
               <TabsContent value="violations" className="space-y-3 sm:space-y-4">
                 {(analysisResult?.violations || []).map((violation: any, index: number) => (
-                  <Card key={index} className="p-4 sm:p-6">
+                  <Card key={index} className="p-4 sm:p-6 overflow-hidden">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-2">
-                          <h3 className="text-base sm:text-lg font-semibold text-slate-900">{violation?.type || 'Legal Issue'}</h3>
+                          <h3 className="text-base sm:text-lg font-semibold text-slate-900 truncate">{violation?.type || 'Legal Issue'}</h3>
                           <Badge
                             variant={(violation?.severity === 'High') ? 'destructive' : 'secondary'}
-                            className="self-start sm:self-auto text-xs"
+                            className="self-start sm:self-auto text-xs flex-shrink-0"
                           >
                             {violation?.severity || 'Medium'} Severity
                           </Badge>
                         </div>
-                        <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base">{violation?.description || 'Legal analysis completed.'}</p>
+                        <p className="text-slate-600 mb-3 sm:mb-4 text-sm sm:text-base break-words">{violation?.description || 'Legal analysis completed.'}</p>
                       </div>
                     </div>
 
@@ -562,7 +564,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                         <h4 className="font-medium text-slate-900 mb-2 text-sm sm:text-base">Applicable Laws:</h4>
                         <div className="flex flex-wrap gap-1 sm:gap-2">
                           {(violation?.applicableLaws || []).map((law: string, lawIndex: number) => (
-                            <Badge key={lawIndex} variant="outline" className="text-xs">
+                            <Badge key={lawIndex} variant="outline" className="text-xs break-words max-w-full">
                               {law}
                             </Badge>
                           ))}
@@ -571,7 +573,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
 
                       <div>
                         <h4 className="font-medium text-slate-900 mb-2 text-sm sm:text-base">Recommended Action:</h4>
-                        <p className="text-slate-600 text-sm sm:text-base">{violation?.recommendedAction || 'Consult with legal expert'}</p>
+                        <p className="text-slate-600 text-sm sm:text-base break-words">{violation?.recommendedAction || 'Consult with legal expert'}</p>
                       </div>
                     </div>
                   </Card>
@@ -579,7 +581,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
               </TabsContent>
 
               <TabsContent value="remedies" className="space-y-4">
-                <Card className="p-4 sm:p-6">
+                <Card className="p-4 sm:p-6 overflow-hidden">
                   <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Available Legal Remedies</h3>
                   <div className="space-y-3 sm:space-y-4">
                     {(analysisResult?.legalRemedies || analysisResult?.recommendedActions || []).map((remedy: string, index: number) => (
@@ -587,8 +589,8 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                         <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
                           <span className="text-blue-600 text-xs sm:text-sm font-bold">{index + 1}</span>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-slate-700 text-sm sm:text-base">{remedy}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-slate-700 text-sm sm:text-base break-words">{remedy}</p>
                         </div>
                       </div>
                     ))}
@@ -598,7 +600,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
 
               <TabsContent value="cost" className="space-y-4">
                 <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                  <Card className="p-4 sm:p-6">
+                  <Card className="p-4 sm:p-6 overflow-hidden">
                     <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Estimated Costs</h3>
                     <div className="space-y-2 sm:space-y-3">
                       <div className="flex justify-between text-sm sm:text-base">
@@ -621,21 +623,21 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
                     </div>
                   </Card>
 
-                  <Card className="p-4 sm:p-6">
+                  <Card className="p-4 sm:p-6 overflow-hidden">
                     <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 sm:mb-4">Timeline</h3>
                     <div className="space-y-3 sm:space-y-4">
                       <div className="flex items-center space-x-3">
                         <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm sm:text-base">Expected Duration: {analysisResult?.timeframe || '3-6 months'}</span>
+                        <span className="text-slate-700 text-sm sm:text-base break-words">{analysisResult?.timeframe || '3-6 months'}</span>
                       </div>
                       <div className="space-y-2">
-                        <div className="text-xs sm:text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600 break-words">
                           <strong>Phase 1:</strong> Initial filing (1-2 weeks)
                         </div>
-                        <div className="text-xs sm:text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600 break-words">
                           <strong>Phase 2:</strong> Response period (2-4 weeks)
                         </div>
-                        <div className="text-xs sm:text-sm text-slate-600">
+                        <div className="text-xs sm:text-sm text-slate-600 break-words">
                           <strong>Phase 3:</strong> Resolution/Hearing (2-4 months)
                         </div>
                       </div>
@@ -645,7 +647,7 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
               </TabsContent>
 
               <TabsContent value="next-steps" className="space-y-4">
-                <Card className="p-4 sm:p-6">
+                <Card className="p-4 sm:p-6 overflow-hidden">
                   <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-4 sm:mb-6">Recommended Next Steps</h3>
                   <div className="space-y-4 sm:space-y-6">
                     <div className="flex items-start space-x-3 sm:space-x-4">
