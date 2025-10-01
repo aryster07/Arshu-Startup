@@ -50,11 +50,15 @@ A modern legal platform built with React, TypeScript, and Vite, featuring AI-pow
    - Output Directory: `build`
    - Install Command: `npm install`
 
-3. **Set Environment Variables**
+3. **Set Environment Variables (Optional)**
+   
+   In Vercel Project Settings → Environment Variables, add:
    ```
-   VITE_API_URL=https://your-api-domain.vercel.app
+   VITE_API_URL=https://your-backend-api-url.com
    VITE_ENVIRONMENT=production
    ```
+   
+   **Note**: These are optional since the app currently works without a backend.
 
 4. **Deploy**
    - Click "Deploy"
