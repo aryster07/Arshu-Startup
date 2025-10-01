@@ -13,9 +13,9 @@ function HomePageDesktop() {
 
   const handleRoleSelection = (role: string) => {
     if (role === 'client') {
-      navigateTo(ROUTES.CLIENT_DASHBOARD);
+      navigateTo('/client/auth');
     } else if (role === 'lawyer') {
-      navigateTo(ROUTES.LAWYER_DASHBOARD);
+      navigateTo('/lawyer/auth');
     }
   };
 
@@ -96,7 +96,7 @@ function HomePageDesktop() {
                   <p className="text-slate-600">Get legal assistance, consultation, and professional guidance for your legal matters</p>
                 </div>
                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  Access Client Portal
+                  Get Started
                 </Button>
               </div>
             </div>
@@ -114,7 +114,7 @@ function HomePageDesktop() {
                   <p className="text-slate-600">Access professional tools, manage cases, and connect with clients efficiently</p>
                 </div>
                 <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                  Access Lawyer Portal
+                  Join Our Network
                 </Button>
               </div>
             </div>

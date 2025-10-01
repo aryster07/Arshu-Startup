@@ -6,6 +6,12 @@ import { ROUTES } from '../constants/routes';
 import DefaultLayout from '../layouts/DefaultLayout';
 import AppLayout from '../layouts/AppLayout';
 
+// Authentication components
+import ClientAuthPortal from '../components/auth/ClientAuthPortal';
+import LawyerAuthPortal from '../components/auth/LawyerAuthPortal';
+import OAuthCallback from '../components/auth/OAuthCallback';
+import ProtectedRoute from '../components/auth/ProtectedRoute';
+
 // Responsive Pages
 import HomePageResponsive from '../pages/HomePageResponsive';
 import ClientDashboardResponsive from '../pages/dashboard/ClientDashboardResponsive';
@@ -127,23 +133,113 @@ export default function SimpleRouter() {
       {/* Homepage */}
       <Route path={ROUTES.HOME} element={<HomePageResponsive />} />
       
-      {/* Dashboard routes */}
-      <Route path={ROUTES.CLIENT_DASHBOARD} element={<ClientDashboardResponsive />} />
-      <Route path="/dashboard/lawyer" element={<LawyerDashboardResponsive />} />
+      {/* Authentication routes */}
+      <Route path="/client/auth" element={<ClientAuthPortal />} />
+      <Route path="/lawyer/auth" element={<LawyerAuthPortal />} />
+      <Route path="/auth/callback/client" element={<OAuthCallback userType="client" />} />
+      <Route path="/auth/callback/lawyer" element={<OAuthCallback userType="lawyer" />} />
       
-      {/* Client Portal Services */}
-      <Route path="/dashboard/client/legal-rights" element={<PortalLegalRightsPage userType="client" />} />
-      <Route path="/dashboard/client/consumer-rights" element={<PortalConsumerRightsPage userType="client" />} />
-      <Route path="/dashboard/client/document-review" element={<PortalDocumentReviewPage userType="client" />} />
-      <Route path="/dashboard/client/emergency" element={<PortalEmergencyServicesPage userType="client" />} />
-      <Route path="/dashboard/client/legal-notice" element={<PortalLegalNoticeServicePage userType="client" />} />
+      {/* Protected Dashboard routes */}
+      <Route 
+        path={ROUTES.CLIENT_DASHBOARD} 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <ClientDashboardResponsive />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/lawyer" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <LawyerDashboardResponsive />
+          </ProtectedRoute>
+        } 
+      />
       
-      {/* Lawyer Portal Services */}
-      <Route path="/dashboard/lawyer/legal-rights" element={<PortalLegalRightsPage userType="lawyer" />} />
-      <Route path="/dashboard/lawyer/consumer-rights" element={<PortalConsumerRightsPage userType="lawyer" />} />
-      <Route path="/dashboard/lawyer/document-review" element={<PortalDocumentReviewPage userType="lawyer" />} />
-      <Route path="/dashboard/lawyer/emergency" element={<PortalEmergencyServicesPage userType="lawyer" />} />
-      <Route path="/dashboard/lawyer/legal-notice" element={<PortalLegalNoticeServicePage userType="lawyer" />} />
+      {/* Protected Client Portal Services */}
+      <Route 
+        path="/dashboard/client/legal-rights" 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <PortalLegalRightsPage userType="client" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/client/consumer-rights" 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <PortalConsumerRightsPage userType="client" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/client/document-review" 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <PortalDocumentReviewPage userType="client" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/client/emergency" 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <PortalEmergencyServicesPage userType="client" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/client/legal-notice" 
+        element={
+          <ProtectedRoute requiredRole="client">
+            <PortalLegalNoticeServicePage userType="client" />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Protected Lawyer Portal Services */}
+      <Route 
+        path="/dashboard/lawyer/legal-rights" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <PortalLegalRightsPage userType="lawyer" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/lawyer/consumer-rights" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <PortalConsumerRightsPage userType="lawyer" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/lawyer/document-review" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <PortalDocumentReviewPage userType="lawyer" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/lawyer/emergency" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <PortalEmergencyServicesPage userType="lawyer" />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard/lawyer/legal-notice" 
+        element={
+          <ProtectedRoute requiredRole="lawyer">
+            <PortalLegalNoticeServicePage userType="lawyer" />
+          </ProtectedRoute>
+        } 
+      />
       
       {/* Marketing Legal services */}
       <Route path={ROUTES.LEGAL_RIGHTS} element={<LegalRightsPage />} />
@@ -159,6 +255,11 @@ export default function SimpleRouter() {
       {/* Legacy redirects */}
       <Route path="/client" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
       <Route path="/lawyer" element={<Navigate to="/dashboard/lawyer" replace />} />
+      
+      {/* Convenient redirects for auth */}
+      <Route path="/login" element={<Navigate to="/client/auth" replace />} />
+      <Route path="/signup" element={<Navigate to="/client/auth" replace />} />
+      <Route path="/dashboard" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
       
       {/* 404 */}
       <Route path="*" element={<NotFoundPage />} />
