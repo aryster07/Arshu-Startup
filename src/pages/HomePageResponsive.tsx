@@ -130,21 +130,14 @@ function HomePageDesktop() {
               Need immediate assistance? Access our quick legal services
             </p>
             <div className="flex items-center justify-center space-x-4">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
-                onClick={() => navigateToScreen('legal-rights')}
-              >
-                Check Legal Rights
-              </Button>
-              <Button
-                size="lg"
-                variant="outline" 
-                className="border-slate-300 text-slate-900 bg-white hover:bg-slate-50 px-8"
-                onClick={() => navigateToScreen('emergency')}
-              >
-                Emergency Services
-              </Button>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg px-6 py-3">
+                <p className="text-blue-800 font-medium">Legal Rights Checker</p>
+                <p className="text-blue-600 text-sm">AI-powered legal analysis</p>
+              </div>
+              <div className="bg-red-50 border border-red-200 rounded-lg px-6 py-3">
+                <p className="text-red-800 font-medium">Emergency Services</p>
+                <p className="text-red-600 text-sm">24/7 legal assistance</p>
+              </div>
             </div>
           </div>
         </div>
@@ -162,111 +155,75 @@ function HomePageDesktop() {
 
           <div className="grid grid-cols-1 gap-6">
             {/* Legal Rights Checker */}
-            <div 
-              className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('legal-rights')}
-            >
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Scale className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">Legal Rights Checker</h3>
-                  <p className="text-slate-600 text-sm mb-3">AI-powered analysis of your legal rights with expert guidance</p>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-                    Check Rights
-                  </Button>
+                  <p className="text-slate-600 text-sm">AI-powered analysis of your legal rights with expert guidance</p>
                 </div>
               </div>
             </div>
 
             {/* Consumer Rights */}
-            <div 
-              className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('consumer-rights')}
-            >
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Shield className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">Consumer Rights</h3>
-                  <p className="text-slate-600 text-sm mb-3">Protection for consumer disputes and marketplace issues</p>
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
-                    Get Protection
-                  </Button>
+                  <p className="text-slate-600 text-sm">Protection for consumer disputes and marketplace issues</p>
                 </div>
               </div>
             </div>
 
             {/* Document Review */}
-            <div 
-              className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('document-review')}
-            >
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <FileText className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">Document Review</h3>
-                  <p className="text-slate-600 text-sm mb-3">Professional review and analysis of legal documents</p>
-                  <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
-                    Review Document
-                  </Button>
+                  <p className="text-slate-600 text-sm">Professional review and analysis of legal documents</p>
                 </div>
               </div>
             </div>
 
             {/* Emergency Services */}
-            <div 
-              className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('emergency')}
-            >
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Clock className="h-6 w-6 text-red-600" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">Emergency Services</h3>
-                  <p className="text-slate-600 text-sm mb-3">24/7 emergency legal assistance for urgent matters</p>
-                  <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white">
-                    Get Help Now
-                  </Button>
+                  <p className="text-slate-600 text-sm">24/7 emergency legal assistance for urgent matters</p>
                 </div>
               </div>
             </div>
 
             {/* Legal Notice Service */}
-            <div 
-              className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('legal-notice')}
-            >
+            <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <Users className="h-6 w-6 text-orange-600" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">Legal Notice Service</h3>
-                  <p className="text-slate-600 text-sm mb-3">Professional legal notice drafting and delivery</p>
-                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white">
-                    Send Notice
-                  </Button>
+                  <p className="text-slate-600 text-sm">Professional legal notice drafting and delivery</p>
                 </div>
               </div>
             </div>
 
             {/* View All Services */}
-            <div 
-              className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300 cursor-pointer"
-              onClick={() => navigateToScreen('services')}
-            >
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-200">
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Explore All Services</h3>
-                <p className="text-slate-600 text-sm mb-4">Browse our complete range of legal services and solutions</p>
-                <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                  View All Services
-                </Button>
+                <p className="text-slate-600 text-sm">Browse our complete range of legal services and solutions</p>
               </div>
             </div>
           </div>

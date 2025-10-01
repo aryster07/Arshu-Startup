@@ -218,7 +218,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                 <h3 className="text-xl font-semibold text-slate-900 mb-4">{service.title}</h3>
                 <p className="text-slate-600 mb-6 leading-relaxed">{service.description}</p>
                 
-                <ul className="space-y-2 mb-8">
+                <ul className="space-y-2">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -226,14 +226,6 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                     </li>
                   ))}
                 </ul>
-
-                <Button 
-                  className={`w-full bg-${service.color}-600 hover:bg-${service.color}-700 text-white`}
-                  onClick={() => onNavigate?.(service.route)}
-                >
-                  {service.buttonText}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
               </div>
             ))}
           </div>

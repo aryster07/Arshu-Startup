@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -7,6 +7,7 @@ import { Badge } from '../../components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
 import { getGeminiService } from '../../services/geminiService';
 import type { LegalAnalysisResponse } from '../../services/geminiService';
+import { useSpeechRecognition } from '../../hooks/useSpeechRecognition';
 // import { useNotification } from '../../hooks/useNotification'; // Removed for now
 import { 
   Shield, 
@@ -52,9 +53,9 @@ function MobileLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 relative overflow-x-hidden">
       {/* Mobile Header */}
-      <header className="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
+      <header className="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Button
@@ -80,9 +81,9 @@ function MobileLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Sidebar Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)}>
+        <div className="fixed inset-0 z-[60] bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)}>
           <div 
-            className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+            className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-[70]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sidebar Header */}
@@ -123,7 +124,7 @@ function MobileLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main Content */}
-      <main className="px-4 sm:px-6 lg:px-8 py-4 pb-6">
+      <main className="px-4 sm:px-6 lg:px-8 py-4 pb-6 overflow-auto">
         <div className="max-w-7xl mx-auto">
           {children}
         </div>
@@ -135,10 +136,42 @@ function MobileLayout({ children }: { children: React.ReactNode }) {
 // Mobile AI Assistant Component
 function MobileAIAssistant() {
   const [query, setQuery] = useState('');
-  const [isListening, setIsListening] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<LegalAnalysisResponse | null>(null);
   const [error, setError] = useState<string>('');
+
+  // Speech recognition hook
+  const {
+    isSupported: isSpeechSupported,
+    isListening,
+    transcript,
+    interimTranscript,
+    error: speechError,
+    startListening,
+    stopListening,
+    resetTranscript
+  } = useSpeechRecognition({
+    language: 'en-US',
+    continuous: true,
+    interimResults: true,
+    autoDetectLanguage: true
+  });
+
+  // Update query with speech transcript
+  useEffect(() => {
+    if (transcript) {
+      setQuery(prev => prev + transcript);
+      resetTranscript();
+    }
+  }, [transcript, resetTranscript]);
+
+  const handleVoiceToggle = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
 
   const handleAnalysis = async () => {
     if (!query.trim()) return;
@@ -198,8 +231,10 @@ function MobileAIAssistant() {
             disabled={isAnalyzing}
           />
           <Button
-            onClick={() => setIsListening(!isListening)}
-            className={`absolute right-2 top-2 p-2 ${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-900 hover:bg-slate-800'}`}
+            onClick={handleVoiceToggle}
+            disabled={!isSpeechSupported}
+            className={`absolute right-2 top-2 p-2 z-10 ${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-900 hover:bg-slate-800'} ${!isSpeechSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
+            title={!isSpeechSupported ? 'Speech recognition not supported' : isListening ? 'Stop recording' : 'Start voice input'}
           >
             {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
           </Button>
@@ -229,6 +264,21 @@ function MobileAIAssistant() {
         <div className="flex items-center justify-center space-x-2 text-red-600 mt-3">
           <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
           <span className="text-xs">Recording... Speak clearly</span>
+        </div>
+      )}
+
+      {/* Interim Speech Transcript */}
+      {interimTranscript && (
+        <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs text-blue-600 mb-1">Listening:</p>
+          <p className="text-sm text-blue-800 italic">{interimTranscript}</p>
+        </div>
+      )}
+
+      {/* Speech Error Message */}
+      {speechError && (
+        <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-800">{speechError}</p>
         </div>
       )}
 
