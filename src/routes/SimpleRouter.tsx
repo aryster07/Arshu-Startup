@@ -158,17 +158,23 @@ export default function SimpleRouter() {
       {/* Public pages with marketing layout */}
       <Route path="/about" element={
         <DefaultLayout>
-          <AboutPage />
+          <WithNavigation>
+            {(navigate) => <AboutPage onNavigate={navigate} />}
+          </WithNavigation>
         </DefaultLayout>
       } />
       <Route path="/contact" element={
         <DefaultLayout>
-          <ContactPage />
+          <WithNavigation>
+            {(navigate) => <ContactPage onNavigate={navigate} />}
+          </WithNavigation>
         </DefaultLayout>
       } />
       <Route path="/services" element={
         <DefaultLayout>
-          <ServicesPage />
+          <WithNavigation>
+            {(navigate) => <ServicesPage onNavigate={navigate} />}
+          </WithNavigation>
         </DefaultLayout>
       } />
       
