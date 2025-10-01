@@ -23,7 +23,6 @@
       "dest": "/index.html"
     }
   ],
-  "functions": {},
   "env": {
     "VITE_API_URL": "@vite_api_url",
     "VITE_ENVIRONMENT": "@vite_environment"
