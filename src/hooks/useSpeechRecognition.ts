@@ -143,10 +143,8 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}):
 
 // Language utilities
 export const SUPPORTED_LANGUAGES = [
-  { code: 'en-US', name: 'English (US)', flag: '🇺🇸', geminiCode: 'en' },
-  { code: 'hi-IN', name: 'हिंदी (Hindi)', flag: '🇮🇳', geminiCode: 'hi' },
-  { code: 'en-GB', name: 'English (UK)', flag: '🇬🇧', geminiCode: 'en' },
-  { code: 'en-AU', name: 'English (AU)', flag: '🇦🇺', geminiCode: 'en' }
+  { code: 'en-US', name: 'English', flag: '🇺🇸', geminiCode: 'en' },
+  { code: 'hi-IN', name: 'हिंदी (Hindi)', flag: '🇮🇳', geminiCode: 'hi' }
 ];
 
 export function getLanguageByCode(code: string) {
