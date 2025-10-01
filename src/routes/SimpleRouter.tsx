@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 
@@ -6,16 +6,12 @@ import { ROUTES } from '../constants/routes';
 import DefaultLayout from '../layouts/DefaultLayout';
 import AppLayout from '../layouts/AppLayout';
 
-// Authentication components
-import ClientAuthPortal from '../components/auth/ClientAuthPortal';
-import LawyerAuthPortal from '../components/auth/LawyerAuthPortal';
-import OAuthCallback from '../components/auth/OAuthCallback';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
+// Dashboard Pages - using original design
+import ClientDashboardResponsive from '../pages/dashboard/ClientDashboardResponsive';
+import LawyerDashboardResponsive from '../pages/dashboard/LawyerDashboardResponsive';
 
 // Responsive Pages
 import HomePageResponsive from '../pages/HomePageResponsive';
-import ClientDashboardResponsive from '../pages/dashboard/ClientDashboardResponsive';
-import LawyerDashboardResponsive from '../pages/dashboard/LawyerDashboardResponsive';
 
 // Static pages - using existing components
 import AboutPage from '../components/AboutPage';
@@ -65,6 +61,14 @@ const LegalNoticeServicePage = () => (
   <DefaultLayout>
     <WithNavigation>
       {(navigate) => <LegalNoticeService onNavigate={navigate} />}
+    </WithNavigation>
+  </DefaultLayout>
+);
+
+const DocumentReviewPage = () => (
+  <DefaultLayout>
+    <WithNavigation>
+      {(navigate) => <DocumentReview onNavigate={navigate} />}
     </WithNavigation>
   </DefaultLayout>
 );
@@ -133,135 +137,58 @@ export default function SimpleRouter() {
       {/* Homepage */}
       <Route path={ROUTES.HOME} element={<HomePageResponsive />} />
       
-      {/* Authentication routes */}
-      <Route path="/client/auth" element={<ClientAuthPortal />} />
-      <Route path="/lawyer/auth" element={<LawyerAuthPortal />} />
-      <Route path="/auth/callback/client" element={<OAuthCallback userType="client" />} />
-      <Route path="/auth/callback/lawyer" element={<OAuthCallback userType="lawyer" />} />
+      {/* Dashboard routes */}
+      <Route path={ROUTES.CLIENT_DASHBOARD} element={<ClientDashboardResponsive />} />
+      <Route path={ROUTES.LAWYER_DASHBOARD} element={<LawyerDashboardResponsive />} />
       
-      {/* Protected Dashboard routes */}
-      <Route 
-        path={ROUTES.CLIENT_DASHBOARD} 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <ClientDashboardResponsive />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/lawyer" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <LawyerDashboardResponsive />
-          </ProtectedRoute>
-        } 
-      />
+      {/* Client Portal Services */}
+      <Route path="/dashboard/client/legal-rights" element={<PortalLegalRightsPage userType="client" />} />
+      <Route path="/dashboard/client/consumer-rights" element={<PortalConsumerRightsPage userType="client" />} />
+      <Route path="/dashboard/client/document-review" element={<PortalDocumentReviewPage userType="client" />} />
+      <Route path="/dashboard/client/emergency" element={<PortalEmergencyServicesPage userType="client" />} />
+      <Route path="/dashboard/client/legal-notice" element={<PortalLegalNoticeServicePage userType="client" />} />
       
-      {/* Protected Client Portal Services */}
-      <Route 
-        path="/dashboard/client/legal-rights" 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <PortalLegalRightsPage userType="client" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/client/consumer-rights" 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <PortalConsumerRightsPage userType="client" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/client/document-review" 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <PortalDocumentReviewPage userType="client" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/client/emergency" 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <PortalEmergencyServicesPage userType="client" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/client/legal-notice" 
-        element={
-          <ProtectedRoute requiredRole="client">
-            <PortalLegalNoticeServicePage userType="client" />
-          </ProtectedRoute>
-        } 
-      />
+      {/* Lawyer Portal Services */}
+      <Route path="/dashboard/lawyer/legal-rights" element={<PortalLegalRightsPage userType="lawyer" />} />
+      <Route path="/dashboard/lawyer/consumer-rights" element={<PortalConsumerRightsPage userType="lawyer" />} />
+      <Route path="/dashboard/lawyer/document-review" element={<PortalDocumentReviewPage userType="lawyer" />} />
+      <Route path="/dashboard/lawyer/emergency" element={<PortalEmergencyServicesPage userType="lawyer" />} />
+      <Route path="/dashboard/lawyer/legal-notice" element={<PortalLegalNoticeServicePage userType="lawyer" />} />
       
-      {/* Protected Lawyer Portal Services */}
-      <Route 
-        path="/dashboard/lawyer/legal-rights" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <PortalLegalRightsPage userType="lawyer" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/lawyer/consumer-rights" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <PortalConsumerRightsPage userType="lawyer" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/lawyer/document-review" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <PortalDocumentReviewPage userType="lawyer" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/lawyer/emergency" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <PortalEmergencyServicesPage userType="lawyer" />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard/lawyer/legal-notice" 
-        element={
-          <ProtectedRoute requiredRole="lawyer">
-            <PortalLegalNoticeServicePage userType="lawyer" />
-          </ProtectedRoute>
-        } 
-      />
+      {/* Public pages with marketing layout */}
+      <Route path="/about" element={
+        <DefaultLayout>
+          <AboutPage />
+        </DefaultLayout>
+      } />
+      <Route path="/contact" element={
+        <DefaultLayout>
+          <ContactPage />
+        </DefaultLayout>
+      } />
+      <Route path="/services" element={
+        <DefaultLayout>
+          <ServicesPage />
+        </DefaultLayout>
+      } />
       
-      {/* Marketing Legal services */}
-      <Route path={ROUTES.LEGAL_RIGHTS} element={<LegalRightsPage />} />
-      <Route path={ROUTES.CONSUMER_RIGHTS} element={<ConsumerRightsPage />} />
-      <Route path={ROUTES.EMERGENCY_SERVICES} element={<EmergencyServicesPage />} />
-      <Route path={ROUTES.LEGAL_NOTICE} element={<LegalNoticeServicePage />} />
+      {/* Legal services pages */}
+      <Route path="/legal-rights" element={<LegalRightsPage />} />
+      <Route path="/consumer-rights" element={<ConsumerRightsPage />} />
+      <Route path="/document-review" element={<DocumentReviewPage />} />
+      <Route path="/emergency" element={<EmergencyServicesPage />} />
+      <Route path="/legal-notice" element={<LegalNoticeServicePage />} />
       
-      {/* Static pages */}
-      <Route path={ROUTES.ABOUT} element={<DefaultLayout><WithNavigation>{(navigate) => <AboutPage onNavigate={navigate} />}</WithNavigation></DefaultLayout>} />
-      <Route path={ROUTES.CONTACT} element={<DefaultLayout><WithNavigation>{(navigate) => <ContactPage onNavigate={navigate} />}</WithNavigation></DefaultLayout>} />
-      <Route path={ROUTES.SERVICES} element={<DefaultLayout><WithNavigation>{(navigate) => <ServicesPage onNavigate={navigate} />}</WithNavigation></DefaultLayout>} />
-      
-      {/* Legacy redirects */}
+      {/* Legacy redirects for convenience */}
+      <Route path="/client/auth" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
+      <Route path="/lawyer/auth" element={<Navigate to={ROUTES.LAWYER_DASHBOARD} replace />} />
+      <Route path="/auth/*" element={<Navigate to="/" replace />} />
+      <Route path="/login" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
+      <Route path="/signup" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
       <Route path="/client" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
-      <Route path="/lawyer" element={<Navigate to="/dashboard/lawyer" replace />} />
+      <Route path="/lawyer" element={<Navigate to={ROUTES.LAWYER_DASHBOARD} replace />} />
       
-      {/* Convenient redirects for auth */}
-      <Route path="/login" element={<Navigate to="/client/auth" replace />} />
-      <Route path="/signup" element={<Navigate to="/client/auth" replace />} />
-      <Route path="/dashboard" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
-      
-      {/* 404 */}
+      {/* 404 page */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

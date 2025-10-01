@@ -36,22 +36,6 @@ export const API_CONFIG = {
   BASE_URL: getApiBaseUrl(),
   ENVIRONMENT: getEnvironment(),
   ENDPOINTS: {
-    AUTH: {
-      LOGIN: '/api/v1/auth/login',
-      REGISTER: '/api/v1/auth/register',
-      LOGOUT: '/api/v1/auth/logout',
-      REFRESH: '/api/v1/auth/refresh',
-      ME: '/api/v1/auth/me',
-      VERIFY_EMAIL: '/api/v1/auth/verify-email',
-      RESEND_VERIFICATION: '/api/v1/auth/resend-verification',
-      FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
-      RESET_PASSWORD: '/api/v1/auth/reset-password',
-      
-      // OAuth endpoints
-      GOOGLE: '/api/v1/auth/google',
-      FACEBOOK: '/api/v1/auth/facebook',
-      APPLE: '/api/v1/auth/apple',
-    },
     USERS: {
       PROFILE: '/api/v1/users/profile',
       UPDATE_PROFILE: '/api/v1/users/profile',
@@ -70,12 +54,6 @@ export const API_CONFIG = {
 // Helper function to build full URL
 export const buildApiUrl = (endpoint: string): string => {
   return `${API_CONFIG.BASE_URL}${endpoint}`;
-};
-
-// Helper function for OAuth redirect URLs
-export const getOAuthUrl = (provider: 'google' | 'facebook' | 'apple', role: 'client' | 'lawyer' = 'client'): string => {
-  const baseUrl = API_CONFIG.BASE_URL;
-  return `${baseUrl}/api/v1/auth/${provider}?role=${role}`;
 };
 
 // Helper function to check if we're in development

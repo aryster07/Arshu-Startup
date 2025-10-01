@@ -7,7 +7,7 @@ import { Badge } from '../../components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
 import { getGeminiService } from '../../services/geminiService';
 import type { LegalAnalysisResponse } from '../../services/geminiService';
-import { useNotification } from '../../hooks/useNotification';
+// import { useNotification } from '../../hooks/useNotification'; // Removed for now
 import { 
   Shield, 
   ShoppingCart, 
@@ -416,8 +416,13 @@ function MobileConsultationForm() {
   const [issueAnalysis, setIssueAnalysis] = useState<any>(null);
   const [isBooking, setIsBooking] = useState(false);
 
-  // Notification hook for user feedback
-  const notify = useNotification();
+  // Simple notification function (replaced useNotification hook)
+  const notify = {
+    success: (message: string) => {
+      console.log('Success:', message);
+      alert(message); // Simple alert for now
+    }
+  };
 
   const analyzeIssue = async () => {
     if (!formData.issue.trim()) return;

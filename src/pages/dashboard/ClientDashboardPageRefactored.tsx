@@ -12,13 +12,18 @@ import { ServicesGrid } from '../../components/dashboard/ServicesGrid';
 import { CasesList } from '../../components/dashboard/CasesList';
 import { ConsultationForm } from '../../components/dashboard/ConsultationForm';
 import { ConsultationBooking } from '../../types/dashboard';
-import { useNotification } from '../../hooks/useNotification';
+// import { useNotification } from '../../hooks/useNotification'; // Removed for now
 
 export default function ClientDashboard() {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
 
-  // Notification hook for user feedback
-  const notify = useNotification();
+  // Simple notification function (replaced useNotification hook)
+  const notify = {
+    success: (message: string) => {
+      console.log('Success:', message);
+      // You can implement toast notifications here
+    }
+  };
 
   const handleLanguageChange = (newLanguage: string) => {
     setSelectedLanguage(newLanguage);

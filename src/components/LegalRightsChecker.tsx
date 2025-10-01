@@ -520,22 +520,22 @@ export default function LegalRightsChecker({ onNavigate }: LegalRightsCheckerPro
             </Card>
 
             <Tabs defaultValue="violations" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 text-xs sm:text-sm">
-                <TabsTrigger value="violations" className="text-xs sm:text-sm">
-                  <span className="hidden sm:inline">Violations Found</span>
-                  <span className="sm:hidden">Violations</span>
+              <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 gap-1 lg:gap-2 h-auto p-1">
+                <TabsTrigger value="violations" className="text-xs lg:text-sm px-2 lg:px-4 py-2 lg:py-3 min-h-[40px] lg:min-h-[44px]">
+                  <span className="hidden lg:inline">Violations Found</span>
+                  <span className="lg:hidden">Violations</span>
                 </TabsTrigger>
-                <TabsTrigger value="remedies" className="text-xs sm:text-sm">
-                  <span className="hidden sm:inline">Legal Remedies</span>
-                  <span className="sm:hidden">Remedies</span>
+                <TabsTrigger value="remedies" className="text-xs lg:text-sm px-2 lg:px-4 py-2 lg:py-3 min-h-[40px] lg:min-h-[44px]">
+                  <span className="hidden lg:inline">Legal Remedies</span>
+                  <span className="lg:hidden">Remedies</span>
                 </TabsTrigger>
-                <TabsTrigger value="cost" className="text-xs sm:text-sm">
-                  <span className="hidden sm:inline">Cost & Timeline</span>
-                  <span className="sm:hidden">Cost</span>
+                <TabsTrigger value="cost" className="text-xs lg:text-sm px-2 lg:px-4 py-2 lg:py-3 min-h-[40px] lg:min-h-[44px]">
+                  <span className="hidden lg:inline">Cost & Timeline</span>
+                  <span className="lg:hidden">Cost</span>
                 </TabsTrigger>
-                <TabsTrigger value="next-steps" className="text-xs sm:text-sm">
-                  <span className="hidden sm:inline">Next Steps</span>
-                  <span className="sm:hidden">Steps</span>
+                <TabsTrigger value="next-steps" className="text-xs lg:text-sm px-2 lg:px-4 py-2 lg:py-3 min-h-[40px] lg:min-h-[44px]">
+                  <span className="hidden lg:inline">Next Steps</span>
+                  <span className="lg:hidden">Steps</span>
                 </TabsTrigger>
               </TabsList>
 

@@ -114,8 +114,23 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
         {/* Mobile Header */}
         <header className="sticky top-0 z-50 bg-white border-b border-slate-200 px-4 py-3">
           <div className="flex items-center justify-between">
-            {/* Left side - Menu button and back button */}
+            {/* Left side - Back button and Menu button */}
             <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  if (!isMainDashboard) {
+                    navigate(`/dashboard/${userType}`);
+                  } else {
+                    navigate('/');
+                  }
+                }}
+                className="h-9 w-9"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              
               <Button
                 variant="ghost"
                 size="icon"
@@ -124,17 +139,6 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
               >
                 <Menu className="h-5 w-5" />
               </Button>
-              
-              {!isMainDashboard && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => navigate(`/dashboard/${userType}`)}
-                  className="h-9 w-9"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-              )}
             </div>
 
             {/* Center - Page title */}
@@ -169,7 +173,7 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="mobile-menu fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl transform transition-transform duration-300">
+            <div className="mobile-menu fixed top-0 left-0 right-0 z-50 bg-white shadow-xl transform transition-transform duration-300 max-h-96 overflow-y-auto">
               {/* Sidebar Header */}
               <div className="p-4 border-b border-slate-200">
                 <div className="flex items-center justify-between">
@@ -194,57 +198,56 @@ export default function AppLayout({ children, userType }: AppLayoutProps) {
               </div>
 
               {/* Navigation */}
-              <nav className="flex-1 p-4 overflow-y-auto">
-                <ul className="space-y-1">
+              <nav className="p-4">
+                <div className="grid grid-cols-2 gap-2">
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.path;
                     
                     return (
-                      <li key={item.id}>
-                        <Link
-                          to={item.path}
-                          className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                            isActive
-                              ? 'bg-slate-900 text-white'
-                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
-                          }`}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <Icon className="h-5 w-5 flex-shrink-0" />
-                          <span className="font-medium">{item.label}</span>
-                        </Link>
-                      </li>
+                      <Link
+                        key={item.id}
+                        to={item.path}
+                        className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+                          isActive
+                            ? 'bg-slate-900 text-white'
+                            : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        }`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Icon className="h-4 w-4 flex-shrink-0" />
+                        <span className="font-medium text-sm">{item.label}</span>
+                      </Link>
                     );
                   })}
-                </ul>
+                </div>
               </nav>
 
               {/* Sidebar Footer */}
               <div className="p-4 border-t border-slate-200">
-                <div className="space-y-1">
+                <div className="grid grid-cols-3 gap-2">
                   <Link
                     to="/dashboard/profile"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+                    className="flex flex-col items-center space-y-1 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <User className="h-5 w-5 flex-shrink-0" />
-                    <span className="font-medium">Profile</span>
+                    <User className="h-4 w-4" />
+                    <span className="text-xs font-medium">Profile</span>
                   </Link>
                   <Link
                     to="/dashboard/settings"
-                    className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
+                    className="flex flex-col items-center space-y-1 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <Settings className="h-5 w-5 flex-shrink-0" />
-                    <span className="font-medium">Settings</span>
+                    <Settings className="h-4 w-4" />
+                    <span className="text-xs font-medium">Settings</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-700 hover:bg-red-50 transition-colors"
+                    className="flex flex-col items-center space-y-1 px-3 py-2 rounded-lg text-red-700 hover:bg-red-50 transition-colors"
                   >
-                    <LogOut className="h-5 w-5 flex-shrink-0" />
-                    <span className="font-medium">Logout</span>
+                    <LogOut className="h-4 w-4" />
+                    <span className="text-xs font-medium">Logout</span>
                   </button>
                 </div>
               </div>

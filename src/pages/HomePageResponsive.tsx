@@ -12,10 +12,14 @@ function HomePageDesktop() {
   const { navigateTo } = useNavigation();
 
   const handleRoleSelection = (role: string) => {
+    // Navigate to the appropriate dashboard
     if (role === 'client') {
-      navigateTo('/client/auth');
+      navigateTo(ROUTES.CLIENT_DASHBOARD);
     } else if (role === 'lawyer') {
-      navigateTo('/lawyer/auth');
+      navigateTo(ROUTES.LAWYER_DASHBOARD);
+    } else {
+      // Fallback to services page
+      navigateTo('/services');
     }
   };
 
