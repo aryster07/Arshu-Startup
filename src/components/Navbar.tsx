@@ -88,16 +88,15 @@ export default function Navbar() {
             to="/"
             className="flex items-center space-x-4 group transition-all duration-300 hover:scale-105"
           >
-            <div className={`p-2.5 bg-slate-900 rounded-xl group-hover:bg-slate-800 transition-all duration-300 ${scrolled ? 'shadow-lg' : ''
-              }`}>
-              <Scale className="h-6 w-6 text-white" />
+            <div className="w-10 h-10 flex-shrink-0">
+              <img src="/logo.svg" alt="Law Bandhu" className="w-full h-full" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-2xl text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
-                LawB
+                Law Bandhu
               </span>
               <span className="text-xs text-slate-600 hidden sm:block group-hover:text-slate-700 transition-colors duration-300">
-                Professional Legal Services
+                AI Legal Assistant & More
               </span>
             </div>
           </Link>

@@ -173,6 +173,13 @@ export default function SimpleRouter() {
       } />
       
       {/* Legal services pages */}
+      <Route path="/services/legal-rights" element={<LegalRightsPage />} />
+      <Route path="/services/consumer-rights" element={<ConsumerRightsPage />} />
+      <Route path="/services/document-review" element={<DocumentReviewPage />} />
+      <Route path="/services/emergency" element={<EmergencyServicesPage />} />
+      <Route path="/services/legal-notice" element={<LegalNoticeServicePage />} />
+      
+      {/* Legacy routes for backward compatibility */}
       <Route path="/legal-rights" element={<LegalRightsPage />} />
       <Route path="/consumer-rights" element={<ConsumerRightsPage />} />
       <Route path="/document-review" element={<DocumentReviewPage />} />
