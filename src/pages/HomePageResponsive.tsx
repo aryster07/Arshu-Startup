@@ -62,27 +62,6 @@ function HomePageDesktop() {
               Connect with qualified legal professionals for comprehensive assistance. 
               Expert guidance for all your legal matters with certified advocates and updated legal knowledge.
             </p>
-
-            <div className="flex flex-wrap justify-center gap-12 mb-16">
-              <div className="flex items-center space-x-3 text-slate-700">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-blue-600" />
-                </div>
-                <span className="font-medium">Certified Professionals</span>
-              </div>
-              <div className="flex items-center space-x-3 text-slate-700">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Clock className="h-5 w-5 text-green-600" />
-                </div>
-                <span className="font-medium">24/7 Support</span>
-              </div>
-              <div className="flex items-center space-x-3 text-slate-700">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="h-5 w-5 text-purple-600" />
-                </div>
-                <span className="font-medium">Updated Legal Knowledge</span>
-              </div>
-            </div>
           </div>
 
           {/* Role Selection Cards */}

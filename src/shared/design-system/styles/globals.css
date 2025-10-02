@@ -1,12 +1,12 @@
 /**
- * Law Bandhu Design System - Main Export
+ * Law Bandhu Design System - Global Styles
+ * Import this file in your main CSS file
  */
 
-export { lawBandhuTheme } from './theme/index';
-export * from './components';
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-// CSS Variables for theming (to be used in global CSS)
-export const cssVariables = `
+/* CSS Variables for Law Bandhu Design System */
 :root {
   /* Brand Colors */
   --lb-primary-50: #eff6ff;
@@ -109,4 +109,123 @@ export const cssVariables = `
   --lb-z-tooltip: 1070;
   --lb-z-toast: 1080;
 }
-`;
+
+/* Global font family setting */
+.font-inter {
+  font-family: var(--lb-font-family);
+}
+
+/* Ensure consistent box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Apply Inter font to body by default */
+body {
+  font-family: var(--lb-font-family);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default margins and improve text rendering */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  font-weight: inherit;
+}
+
+/* Improve button styling - only font inheritance, not background/border reset */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+/* Improve input styling */
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--lb-primary-500);
+  outline-offset: 2px;
+}
+
+/* Utility classes for consistent styling */
+.lb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--lb-space-4);
+}
+
+.lb-section {
+  padding: var(--lb-space-16) 0;
+}
+
+.lb-grid {
+  display: grid;
+  gap: var(--lb-space-8);
+}
+
+.lb-flex {
+  display: flex;
+  gap: var(--lb-space-4);
+}
+
+.lb-button-group {
+  display: flex;
+  gap: var(--lb-space-3);
+}
+
+.lb-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--lb-space-6);
+}
+
+/* Animation utilities */
+.lb-fade-in {
+  animation: fadeIn var(--lb-transition-base) ease-in-out;
+}
+
+.lb-slide-up {
+  animation: slideUp var(--lb-transition-base) ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .lb-container {
+    padding: 0 var(--lb-space-4);
+  }
+  
+  .lb-section {
+    padding: var(--lb-space-12) 0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .lb-no-print {
+    display: none !important;
+  }
+}

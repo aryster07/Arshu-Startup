@@ -345,17 +345,29 @@ export default function LawyerDashboardMobile() {
 
       {/* Mobile Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-6 bg-white">
-          <TabsTrigger value="overview" className="text-xs py-3">
+        <TabsList className="grid w-full grid-cols-4 mb-6 bg-slate-100 p-2 rounded-xl gap-2">
+          <TabsTrigger 
+            value="overview" 
+            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          >
             Overview
           </TabsTrigger>
-          <TabsTrigger value="cases" className="text-xs py-3">
+          <TabsTrigger 
+            value="cases" 
+            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          >
             Cases
           </TabsTrigger>
-          <TabsTrigger value="schedule" className="text-xs py-3">
+          <TabsTrigger 
+            value="schedule" 
+            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          >
             Schedule
           </TabsTrigger>
-          <TabsTrigger value="clients" className="text-xs py-3">
+          <TabsTrigger 
+            value="clients" 
+            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          >
             Clients
           </TabsTrigger>
         </TabsList>

@@ -140,11 +140,31 @@ export default function LawyerDashboardPage() {
 
         {/* Main Content Tabs - Mobile responsive */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col space-y-4 lg:space-y-6">
-          <TabsList className="grid w-full grid-cols-4 h-auto">
-            <TabsTrigger value="overview" className="text-xs lg:text-sm py-3 lg:py-2">Overview</TabsTrigger>
-            <TabsTrigger value="cases" className="text-xs lg:text-sm py-3 lg:py-2">Cases</TabsTrigger>
-            <TabsTrigger value="schedule" className="text-xs lg:text-sm py-3 lg:py-2">Schedule</TabsTrigger>
-            <TabsTrigger value="messages" className="text-xs lg:text-sm py-3 lg:py-2">Messages</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 h-auto bg-slate-100 p-2 rounded-xl gap-2">
+            <TabsTrigger 
+              value="overview" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="cases" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
+              Cases
+            </TabsTrigger>
+            <TabsTrigger 
+              value="schedule" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
+              Schedule
+            </TabsTrigger>
+            <TabsTrigger 
+              value="messages" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
+              Messages
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4 lg:space-y-6">

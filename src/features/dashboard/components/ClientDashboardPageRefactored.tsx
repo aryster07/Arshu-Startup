@@ -57,14 +57,23 @@ export default function ClientDashboard() {
 
         {/* Main Tabs - Mobile responsive */}
         <Tabs defaultValue="services" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-auto">
-            <TabsTrigger value="services" className="text-xs lg:text-sm py-3 lg:py-2">
+          <TabsList className="grid w-full grid-cols-3 h-auto bg-slate-100 p-2 rounded-xl gap-2">
+            <TabsTrigger 
+              value="services" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
               Legal Services
             </TabsTrigger>
-            <TabsTrigger value="cases" className="text-xs lg:text-sm py-3 lg:py-2">
+            <TabsTrigger 
+              value="cases" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
               My Cases
             </TabsTrigger>
-            <TabsTrigger value="consultation" className="text-xs lg:text-sm py-3 lg:py-2">
+            <TabsTrigger 
+              value="consultation" 
+              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            >
               Book Consultation
             </TabsTrigger>
           </TabsList>

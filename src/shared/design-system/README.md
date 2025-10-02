@@ -1,254 +1,243 @@
 # Law Bandhu Design System
 
-A comprehensive, professional design system for the Law Bandhu legal services platform.
+A comprehensive design system for Law Bandhu platform ensuring consistent UI/UX across all components.
 
-## 🎨 Overview
+## Overview
 
-The Law Bandhu Design System provides a consistent, scalable, and professional foundation for building legal services interfaces. It includes design tokens, components, patterns, and utilities that ensure consistency across the entire platform.
+The Law Bandhu Design System provides:
+- **Consistent Colors**: Blue primary (#3b82f6) and gold secondary (#f59e0b) brand colors
+- **Typography**: Inter font family with predefined scales
+- **Spacing**: 8px grid system for precise layout control
+- **Components**: Reusable UI components with consistent styling
+- **Theme**: Centralized design tokens for easy maintenance
 
-## 📁 Structure
+## Installation
 
-```
-src/shared/design-system/
-├── tokens/
-│   ├── colors.ts          # Color palette and semantic colors
-│   ├── typography.ts      # Font scales, weights, and text styles
-│   ├── spacing.ts         # Spacing, shadows, borders, z-index
-│   └── components.ts      # Component-specific tokens
-├── components/
-│   ├── Button.tsx         # Button variants and specialized buttons
-│   ├── Input.tsx          # Input component with variants
-│   ├── Card.tsx           # Card component with sub-components
-│   ├── Badge.tsx          # Badge component with status variants
-│   └── Alert.tsx          # Alert component with legal-specific variants
-├── utils/
-│   ├── classNames.ts      # Class name utilities and helpers
-│   └── responsive.ts      # Responsive design utilities
-├── theme.ts               # Main theme configuration
-└── index.ts               # Main exports
-```
+The design system is already integrated into the project. Import components as needed:
 
-## 🎯 Design Tokens
-
-### Colors
-- **Primary**: Blue color scale (blue-50 to blue-950)
-- **Secondary**: Slate color scale for text and backgrounds
-- **Status**: Success (green), Warning (amber), Error (red)
-- **Legal**: Gold and purple accents for legal contexts
-- **Semantic**: Pre-defined color purposes (text, background, border)
-
-### Typography
-- **Font Family**: Inter (primary), Source Serif Pro (legal documents)
-- **Scale**: From 12px (xs) to 128px (9xl)
-- **Semantic Styles**: h1-h6, body, button, legal text
-- **Responsive Classes**: Mobile-first typography scaling
-
-### Spacing
-- **Base Scale**: 4px base unit (0.25rem)
-- **Semantic Spacing**: Component padding, margins, gaps
-- **Layout Spacing**: Section, container, grid spacing
-- **Border Radius**: From 2px (sm) to 24px (3xl)
-
-## 🧩 Components
-
-### Button Component
 ```tsx
-import { Button, MicrophoneButton, AnalyzeButton } from '@/shared/design-system';
-
-// Standard variants
-<Button variant="primary" size="md">Primary Button</Button>
-<Button variant="outline" size="lg">Outline Button</Button>
-
-// Specialized buttons
-<MicrophoneButton isLoading={isListening} />
-<AnalyzeButton size="lg" isLoading={isAnalyzing}>Analyze Legal Rights</AnalyzeButton>
+import { Button, Card, Input, Badge, Alert, Typography } from '@/shared/design-system';
 ```
 
-**Variants**: `primary`, `secondary`, `outline`, `ghost`, `destructive`  
-**Sizes**: `sm`, `md`, `lg`, `xl`, `icon`
+## Core Components
 
-### Card Component
+### Button
 ```tsx
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/design-system';
+<Button variant="primary" size="md">
+  Click me
+</Button>
 
-<Card variant="elevated" padding="lg">
+// Available variants: primary, secondary, outline, ghost, success, warning, error
+// Available sizes: sm, md, lg, xl
+```
+
+### Card
+```tsx
+<Card variant="default" padding="md">
   <CardHeader>
-    <CardTitle>Legal Analysis</CardTitle>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>Card description</CardDescription>
   </CardHeader>
   <CardContent>
     Content goes here
   </CardContent>
 </Card>
+
+// Available variants: default, elevated, outlined, filled
+// Available padding: none, sm, md, lg, xl
 ```
 
-**Variants**: `default`, `elevated`, `outline`, `ghost`  
-**Padding**: `sm`, `md`, `lg`
-
-### Badge Component
+### Input
 ```tsx
-import { Badge, StatusBadge, LegalBadge, RiskBadge } from '@/shared/design-system';
-
-<Badge variant="primary" size="md">Legal</Badge>
-<StatusBadge status="active">Active Case</StatusBadge>
-<RiskBadge risk="medium">Medium Risk</RiskBadge>
-<LegalBadge>Legal Document</LegalBadge>
-```
-
-### Alert Component
-```tsx
-import { Alert, LegalNoticeAlert, ErrorAlert } from '@/shared/design-system';
-
-<LegalNoticeAlert 
-  title="Legal Notice" 
-  description="This analysis is for informational purposes only." 
+<Input
+  label="Email"
+  placeholder="Enter your email"
+  size="md"
+  helperText="We'll never share your email"
 />
 
-<ErrorAlert 
-  title="Analysis Error" 
-  description="Please provide a valid legal concern." 
-  dismissible 
-/>
+// Available sizes: sm, md, lg
 ```
 
-## 🛠 Utilities
-
-### Class Name Utilities
+### Badge
 ```tsx
-import { cn, colorVariant, focusRing } from '@/shared/design-system/utils/classNames';
+<Badge variant="primary" size="md">
+  New
+</Badge>
 
-const buttonClass = cn(
-  'px-4 py-2 rounded',
-  colorVariant('blue', 'solid'),
-  focusRing('blue')
-);
+// Available variants: primary, secondary, success, warning, error, info
+// Available sizes: sm, md, lg
 ```
 
-### Responsive Utilities
+### Alert
 ```tsx
-import { useResponsive, responsivePatterns } from '@/shared/design-system/utils/responsive';
+<Alert variant="info" title="Information">
+  This is an informational message
+</Alert>
 
-const { isMobile, isDesktop } = useResponsive();
-
-<div className={responsivePatterns.cardGrid}>
-  {/* Responsive card grid */}
-</div>
+// Available variants: info, success, warning, error
 ```
 
-## 🎨 Theme Usage
+### Typography
+```tsx
+<Typography variant="h1">Main Heading</Typography>
+<Typography variant="body">Body text</Typography>
+<Typography variant="caption">Small caption text</Typography>
 
-### CSS Custom Properties
-The design system automatically generates CSS custom properties for theming:
+// Available variants: h1, h2, h3, h4, h5, h6, body, body-sm, caption, overline
+```
+
+## Design Tokens
+
+### Colors
+
+#### Brand Colors
+- **Primary**: Blue scale (#eff6ff to #1e3a8a)
+- **Secondary**: Gold scale (#fffbeb to #78350f)
+
+#### Neutral Colors
+- **Slate**: Neutral scale (#f8fafc to #0f172a)
+
+#### Semantic Colors
+- **Success**: #10b981
+- **Warning**: #f59e0b
+- **Error**: #ef4444
+- **Info**: #3b82f6
+
+### Typography
+
+#### Font Family
+- **Primary**: Inter (web font)
+- **Fallback**: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+
+#### Font Sizes
+- **xs**: 0.75rem (12px)
+- **sm**: 0.875rem (14px)
+- **base**: 1rem (16px)
+- **lg**: 1.125rem (18px)
+- **xl**: 1.25rem (20px)
+- **2xl**: 1.5rem (24px)
+- **3xl**: 1.875rem (30px)
+- **4xl**: 2.25rem (36px)
+
+### Spacing (8px Grid)
+
+- **1**: 0.125rem (2px)
+- **2**: 0.25rem (4px)
+- **3**: 0.375rem (6px)
+- **4**: 0.5rem (8px)
+- **6**: 0.75rem (12px)
+- **8**: 1rem (16px)
+- **10**: 1.25rem (20px)
+- **12**: 1.5rem (24px)
+- **16**: 2rem (32px)
+- **20**: 2.5rem (40px)
+- **24**: 3rem (48px)
+- **32**: 4rem (64px)
+- **40**: 5rem (80px)
+- **48**: 6rem (96px)
+- **64**: 8rem (128px)
+
+### Border Radius
+
+- **none**: 0
+- **sm**: 0.125rem (2px)
+- **base**: 0.25rem (4px)
+- **md**: 0.375rem (6px)
+- **lg**: 0.5rem (8px)
+- **xl**: 0.75rem (12px)
+- **2xl**: 1rem (16px)
+- **full**: 9999px
+
+### Shadows
+
+- **sm**: 0 1px 2px 0 rgb(0 0 0 / 0.05)
+- **base**: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)
+- **md**: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+- **lg**: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)
+- **xl**: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)
+
+### Transitions
+
+- **fast**: 150ms cubic-bezier(0.4, 0, 0.2, 1)
+- **base**: 200ms cubic-bezier(0.4, 0, 0.2, 1)
+- **slow**: 300ms cubic-bezier(0.4, 0, 0.2, 1)
+
+## CSS Variables
+
+All design tokens are available as CSS variables with the `--lb-` prefix:
 
 ```css
-:root {
-  --theme-primary: #2563eb;
-  --theme-primary-hover: #1d4ed8;
-  --theme-text-primary: #0f172a;
-  --theme-background: #ffffff;
-}
+/* Colors */
+--lb-primary-500: #3b82f6;
+--lb-secondary-500: #f59e0b;
+
+/* Typography */
+--lb-font-family: 'Inter', sans-serif;
+--lb-font-size-base: 1rem;
+
+/* Spacing */
+--lb-space-4: 0.5rem;
+--lb-space-8: 1rem;
+
+/* Shadows */
+--lb-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 ```
 
-### Theme Configuration
-```tsx
-import { theme, applyTheme } from '@/shared/design-system';
+## Utility Classes
 
-// Apply theme to document
-applyTheme();
+### Layout
+- `.lb-container`: Max-width container with padding
+- `.lb-section`: Section with vertical padding
+- `.lb-grid`: Grid layout with gap
+- `.lb-flex`: Flex layout with gap
+- `.lb-card-grid`: Responsive card grid
 
-// Access theme values
-const primaryColor = theme.semantic.primary;
-const spacing = theme.spacing[4];
-```
+### Animations
+- `.lb-fade-in`: Fade in animation
+- `.lb-slide-up`: Slide up animation
 
-## 📱 Responsive Design
+### Responsive
+- Responsive utilities for mobile-first design
+- Breakpoints follow standard conventions
 
-### Breakpoints
-- `xs`: 475px
-- `sm`: 640px  
-- `md`: 768px
-- `lg`: 1024px
-- `xl`: 1280px
-- `2xl`: 1536px
+## Usage Guidelines
 
-### Responsive Patterns
-```tsx
-// Pre-built responsive layouts
-<div className={responsivePatterns.twoColumn}>
-  <div>Content 1</div>
-  <div>Content 2</div>
-</div>
+### Consistency
+- Always use design system components instead of custom elements
+- Stick to the defined color palette and spacing scale
+- Use consistent typography variants
 
-<div className={responsivePatterns.cardGrid}>
-  {/* Auto-responsive card grid */}
-</div>
-```
-
-## 🎯 Legal-Specific Features
-
-### Legal Components
-- **LegalBadge**: Gold-themed badges for legal content
-- **LegalNoticeAlert**: Warning alerts for legal disclaimers
-- **Legal Document Styles**: Serif typography for formal documents
-
-### Legal Color Palette
-- **Legal Gold**: For certifications and achievements
-- **Legal Purple**: For legal authority and professionalism
-- **Analysis Blue**: For AI analysis sections
-
-## 🚀 Best Practices
-
-### Component Usage
-1. **Always use design system components** instead of custom styling
-2. **Use semantic color tokens** rather than specific color values
-3. **Apply responsive patterns** for consistent layouts
-4. **Use specialized components** (MicrophoneButton, AnalyzeButton) for common patterns
-
-### Consistency Guidelines
-1. **Spacing**: Use the 4px grid system consistently
-2. **Typography**: Use semantic text styles (h1-h6, body, etc.)
-3. **Colors**: Stick to the defined color palette
-4. **Shadows**: Use predefined shadow tokens
+### Accessibility
+- All components include proper focus states
+- Color contrast meets WCAG guidelines
+- Semantic HTML is used throughout
 
 ### Performance
-1. **Tree-shaking friendly**: Import only what you need
-2. **CSS-in-JS optimized**: Minimal runtime overhead
-3. **TypeScript support**: Full type safety
+- Components are optimized for bundle size
+- CSS variables enable efficient theming
+- Animations use transform and opacity for smooth performance
 
-## 🔄 Updates Applied
+## Migration from Existing Components
 
-The Legal Rights Checker has been updated to use the new design system:
+The design system is backward-compatible with existing shadcn/ui components:
 
-✅ **Microphone Button**: Now matches dashboard style (small, integrated)  
-✅ **Analyze Button**: Consistent with dashboard analyze button  
-✅ **Layout**: Dashboard-style input + button layout  
-✅ **Status Messages**: Compact, dashboard-style feedback  
-✅ **Color Consistency**: Uses website color scheme (blue-600/blue-700)  
-
-### Before vs After
-- **Before**: Large, custom-styled buttons with inconsistent colors
-- **After**: Small, professional buttons matching dashboard exactly
-- **Improvement**: Consistent user experience across all sections
-
-## 📖 Usage Examples
-
-### Dashboard-Style Input Section
 ```tsx
-// The new Legal Rights Checker uses this exact pattern
-<div className="flex gap-4">
-  <div className="flex-1 relative">
-    <Textarea
-      placeholder="Describe your legal issue..."
-      className="min-h-[80px] pr-12 text-sm resize-none border border-slate-300 rounded-md"
-    />
-    <button className="absolute right-2 top-2 p-1.5 rounded-sm transition-colors">
-      <Mic className="h-4 w-4" />
-    </button>
-  </div>
-  <Button className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-6 h-10">
-    <Send className="h-3 w-3 mr-1" />
-    Analyze
-  </Button>
-</div>
+// Old way (still works)
+import { Button } from '@/components/ui/button';
+
+// New way (recommended)
+import { Button } from '@/shared/design-system';
 ```
 
-This provides a comprehensive, professional design system that ensures consistency across the entire Law Bandhu platform while maintaining the specific legal services context and requirements.
+## Future Enhancements
+
+- Dark theme support
+- Additional component variants
+- Advanced animation utilities
+- Mobile-specific optimizations
+- Integration with state management
+
+---
+
+For questions or contributions to the design system, please refer to the development team.

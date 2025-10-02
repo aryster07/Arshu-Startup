@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Scale, Phone, Clock, ChevronDown, Home, Users, FileText, Shield, AlertTriangle, Info, Mail, Briefcase, Award } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '../design-system/components/Button';
+import { Typography } from '../design-system/components/Typography';
 import { ROUTES } from '../../core/constants/routes';
 
 export default function Navbar() {
@@ -92,12 +93,18 @@ export default function Navbar() {
               <img src="/logo.svg" alt="Law Bandhu" className="w-full h-full" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-2xl text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+              <Typography 
+                variant="h5" 
+                className="group-hover:text-blue-600 transition-colors duration-300"
+              >
                 Law Bandhu
-              </span>
-              <span className="text-xs text-slate-600 hidden sm:block group-hover:text-slate-700 transition-colors duration-300">
+              </Typography>
+              <Typography 
+                variant="caption" 
+                className="hidden sm:block group-hover:text-slate-700 transition-colors duration-300"
+              >
                 AI Legal Assistant & More
-              </span>
+              </Typography>
             </div>
           </Link>
 
