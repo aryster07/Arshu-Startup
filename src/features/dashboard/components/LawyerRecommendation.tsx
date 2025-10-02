@@ -33,6 +33,27 @@ export function LawyerRecommendation({ specialization, className = "" }: LawyerR
     notify.info(`Contact ${lawyer.name}: This feature will be implemented to connect you directly with the lawyer.`);
   };
 
+  const getRecommendationMessage = (specialization: string): string => {
+    switch (specialization) {
+      case 'Criminal Lawyer':
+        return 'This appears to be a serious criminal matter requiring specialized criminal defense representation. We recommend immediate consultation with an experienced criminal lawyer.';
+      case 'General Legal Expert':
+        return 'This legal matter can be handled by a general legal expert who can provide appropriate guidance and represent you effectively. They can also refer you to specialists if needed.';
+      case 'Family Lawyer':
+        return 'Family matters require sensitive handling by lawyers experienced in family law, matrimonial disputes, and personal relationships.';
+      case 'Consumer Lawyer':
+        return 'Consumer disputes require lawyers familiar with consumer protection laws and experience dealing with businesses and service providers.';
+      case 'Employment Lawyer':
+        return 'Workplace issues require lawyers specialized in labor laws, employment rights, and workplace disputes.';
+      case 'Real Estate Lawyer':
+        return 'Property matters require lawyers with expertise in real estate laws, property transactions, and related regulations.';
+      case 'Civil Lawyer':
+        return 'Civil disputes require lawyers experienced in civil law procedures, contract disputes, and damage recovery.';
+      default:
+        return `This case requires specialized expertise. We recommend consulting with a ${specialization} for professional legal guidance.`;
+    }
+  };
+
   if (!showLawyers) {
     return (
       <div className={`mt-4 p-4 bg-green-50 border border-green-200 rounded-lg ${className}`}>
@@ -41,7 +62,7 @@ export function LawyerRecommendation({ specialization, className = "" }: LawyerR
           <h5 className="font-medium text-green-900">Expert Legal Assistance Recommended</h5>
         </div>
         <p className="text-green-800 mb-3">
-          Based on your case analysis, we recommend consulting with a <strong>{specialization}</strong> for professional legal guidance.
+          {getRecommendationMessage(specialization)}
         </p>
         <Button
           onClick={handleShowLawyers}

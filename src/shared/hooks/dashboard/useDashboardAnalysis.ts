@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getGeminiService } from '../../services/geminiService';
 import { getGeminiLanguageCode } from '../useSpeechRecognition';
 import { AnalysisRequest, AnalysisResponse, DashboardState } from '../../types/dashboard';
-import { LOADING_MESSAGES } from '../../constants/legal';
+import { LOADING_MESSAGES } from '../../../core/constants/legal';
 import { useDashboardSarcasticLoading } from '../useSarcasticLoadingMessages';
 
 export function useDashboardAnalysis() {
@@ -179,8 +179,9 @@ Click "Get Detailed Analysis" for comprehensive breakdown and next steps.`;
       const lawyerRecommendationPrompt = `You are a legal AI assistant. Based on the legal query and analysis provided, determine the MOST APPROPRIATE lawyer specialization.
 
 AVAILABLE SPECIALIZATIONS (choose EXACTLY one from this list):
-- Criminal Lawyer
-- Civil Lawyer  
+- Criminal Lawyer (ONLY for serious crimes: murder, rape, serious assault, major fraud, narcotics)
+- General Legal Expert (for minor crimes, theft, small disputes, general legal issues)
+- Civil Lawyer
 - Consumer Lawyer
 - Family Lawyer
 - Corporate Lawyer
@@ -191,12 +192,15 @@ AVAILABLE SPECIALIZATIONS (choose EXACTLY one from this list):
 - Constitutional Lawyer
 - Intellectual Property Lawyer
 - Banking & Finance Lawyer
-- General Legal Expert
 
 ANALYSIS GUIDELINES:
-1. Choose the MOST SPECIFIC specialization that matches the primary legal issue
-2. If multiple specializations apply, choose the one that addresses the main concern
-3. If you're uncertain or the query doesn't clearly fit any specific category, choose "General Legal Expert"
+1. For MINOR crimes (phone theft, petty theft, small fraud, cyber complaints) → Choose "General Legal Expert"
+2. For SERIOUS crimes (murder, rape, major assault, serious fraud) → Choose "Criminal Lawyer"
+3. For property, business, family, consumer issues → Choose the specific specialization
+4. If uncertain or general legal matter → Choose "General Legal Expert"
+5. Consider the SEVERITY and COMPLEXITY of the legal matter
+
+IMPORTANT: "General Legal Expert" is appropriate for most common legal issues and minor crimes.
 
 QUERY: "${originalQuery}"
 
@@ -225,10 +229,10 @@ LAWYER TYPE:`;
 
       // Validate AI response against our known types
       const validTypes = [
-        'Criminal Lawyer', 'Civil Lawyer', 'Consumer Lawyer', 'Family Lawyer',
+        'Criminal Lawyer', 'General Legal Expert', 'Civil Lawyer', 'Consumer Lawyer', 'Family Lawyer',
         'Corporate Lawyer', 'Employment Lawyer', 'Real Estate Lawyer', 'Tax Lawyer',
         'Immigration Lawyer', 'Constitutional Lawyer', 'Intellectual Property Lawyer',
-        'Banking & Finance Lawyer', 'General Legal Expert'
+        'Banking & Finance Lawyer'
       ];
 
       // Try to find a valid type even if response has extra text
@@ -279,15 +283,23 @@ LAWYER TYPE:`;
     // Enhanced keyword detection with better coverage and specificity
     const specializations = {
       'Criminal Lawyer': [
-        // Very specific criminal terms to avoid false matches
+        // Serious criminal terms only - avoid minor theft/disputes
+        'murder case', 'assault case', 'robbery case', 'rape case', 'kidnapping',
         'criminal case', 'criminal defense', 'criminal charges', 'criminal court',
         'police case', 'fir filed', 'fir lodged', 'arrest warrant', 'police custody',
         'bail application', 'bail hearing', 'anticipatory bail',
-        'murder case', 'assault case', 'robbery case', 'theft case',
         'section 420', 'section 498a', 'section 377', 'ipc section',
         'crpc', 'criminal procedure code', 'chargesheet filed',
-        'cybercrime complaint', 'dowry harassment case', 'domestic violence case',
-        'narcotic case', 'criminal investigation', 'accused in case'
+        'narcotic case', 'criminal investigation', 'accused in case',
+        'homicide', 'attempted murder', 'grievous hurt', 'criminal conspiracy'
+      ],
+      'General Legal Expert': [
+        // Minor disputes and general issues
+        'theft case', 'phone stolen', 'mobile stolen', 'wallet stolen', 'bike stolen',
+        'petty theft', 'small dispute', 'minor issue', 'complaint filed',
+        'cybercrime complaint', 'online fraud', 'cheating case', 'fraud case',
+        'dowry harassment case', 'domestic violence case', 'neighbor dispute',
+        'simple legal matter', 'legal advice needed', 'police complaint'
       ],
       'Family Lawyer': [
         // Family relationships
