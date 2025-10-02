@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../shared/compon
 import { Card } from '../../../shared/components/ui/card';
 import { Button } from '../../../shared/components/ui/button';
 import { Badge } from '../../../shared/components/ui/badge';
-import { 
-  FileText, 
-  Calendar, 
+import {
+  FileText,
+  Calendar,
   Users,
   TrendingUp,
   Clock,
@@ -21,6 +21,18 @@ import {
   Filter,
   User
 } from 'lucide-react';
+
+// Custom styles to ensure active tab styling works - same as other dashboards
+const customTabStyles = `
+  .custom-tab-trigger[data-state="active"] {
+    background-color: white !important;
+    color: rgb(37 99 235) !important;
+    border-color: rgb(59 130 246) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    font-weight: 600 !important;
+    transform: scale(1.02) !important;
+  }
+`;
 
 // Mobile Layout Component
 function MobileLawyerLayout({ children }: { children: React.ReactNode }) {
@@ -166,14 +178,14 @@ function MobileCasesManagement() {
                   <h4 className="font-medium text-slate-900 text-sm truncate">{case_.client}</h4>
                   <p className="text-xs text-slate-600">{case_.type}</p>
                 </div>
-                <Badge 
+                <Badge
                   variant={case_.priority === 'high' ? 'destructive' : case_.priority === 'medium' ? 'default' : 'secondary'}
                   className="text-xs"
                 >
                   {case_.status}
                 </Badge>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-xs text-slate-600">
                   <Calendar className="h-3 w-3 mr-1" />
@@ -241,7 +253,7 @@ function MobileSchedule() {
                 </div>
                 <p className="text-xs text-slate-600">{appointment.type} • {appointment.duration}</p>
                 <div className="flex items-center justify-between mt-2">
-                  <Badge 
+                  <Badge
                     variant={appointment.status === 'confirmed' ? 'default' : 'secondary'}
                     className="text-xs"
                   >
@@ -316,7 +328,7 @@ function MobileClientManagement() {
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Badge 
+                <Badge
                   variant={client.status === 'active' ? 'default' : 'secondary'}
                   className="text-xs"
                 >
@@ -340,35 +352,38 @@ export default function LawyerDashboardMobile() {
 
   return (
     <MobileLawyerLayout>
+      {/* Inject custom styles for tab styling */}
+      <style dangerouslySetInnerHTML={{ __html: customTabStyles }} />
+
       {/* Stats Overview */}
       <MobileStats />
 
       {/* Mobile Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-6 bg-slate-100 p-2 rounded-xl gap-2">
-          <TabsTrigger 
-            value="overview" 
-            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+        <TabsList className="grid w-full grid-cols-4 h-auto bg-slate-100 p-2 rounded-xl gap-2">
+          <TabsTrigger
+            value="overview"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
             Overview
           </TabsTrigger>
-          <TabsTrigger 
-            value="cases" 
-            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          <TabsTrigger
+            value="cases"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
             Cases
           </TabsTrigger>
-          <TabsTrigger 
-            value="schedule" 
-            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          <TabsTrigger
+            value="schedule"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
             Schedule
           </TabsTrigger>
-          <TabsTrigger 
-            value="clients" 
-            className="text-xs py-3 px-3 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+          <TabsTrigger
+            value="messages"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-3 lg:px-4 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
-            Clients
+            Messages
           </TabsTrigger>
         </TabsList>
 
@@ -421,7 +436,7 @@ export default function LawyerDashboardMobile() {
           <MobileSchedule />
         </TabsContent>
 
-        <TabsContent value="clients">
+        <TabsContent value="messages">
           <MobileClientManagement />
         </TabsContent>
       </Tabs>
@@ -429,15 +444,15 @@ export default function LawyerDashboardMobile() {
       {/* Quick Action Buttons */}
       <div className="fixed bottom-4 left-4 right-4 z-10">
         <div className="flex space-x-3">
-          <Button 
+          <Button
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
             size="lg"
           >
             <Plus className="h-4 w-4 mr-2" />
             New Case
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="flex-1 bg-white border-slate-300 shadow-lg"
             size="lg"
           >

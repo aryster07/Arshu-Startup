@@ -14,6 +14,18 @@ import { ConsultationForm } from './ConsultationForm';
 import { ConsultationBooking } from '../../../shared/types/dashboard';
 // import { useNotification } from '../../hooks/useNotification'; // Removed for now
 
+// Custom styles to ensure active tab styling works
+const customTabStyles = `
+  .custom-tab-trigger[data-state="active"] {
+    background-color: white !important;
+    color: rgb(37 99 235) !important;
+    border-color: rgb(59 130 246) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    font-weight: 600 !important;
+    transform: scale(1.02) !important;
+  }
+`;
+
 export default function ClientDashboard() {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
 
@@ -38,6 +50,9 @@ export default function ClientDashboard() {
 
   return (
     <AppLayout userType="client">
+      {/* Custom styles for active tab visibility */}
+      <style dangerouslySetInnerHTML={{ __html: customTabStyles }} />
+
       <div className="h-full flex flex-col">
         {/* Welcome Section - Original Style */}
         <div className="mb-4">
@@ -58,21 +73,21 @@ export default function ClientDashboard() {
         {/* Main Tabs - Mobile responsive */}
         <Tabs defaultValue="services" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-auto bg-slate-100 p-2 rounded-xl gap-2">
-            <TabsTrigger 
-              value="services" 
-              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            <TabsTrigger
+              value="services"
+              className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
             >
               Legal Services
             </TabsTrigger>
-            <TabsTrigger 
-              value="cases" 
-              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            <TabsTrigger
+              value="cases"
+              className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
             >
               My Cases
             </TabsTrigger>
-            <TabsTrigger 
-              value="consultation" 
-              className="text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent data-[state=active]:!bg-white data-[state=active]:!text-blue-600 data-[state=active]:!border-blue-400 data-[state=active]:!shadow-lg data-[state=active]:!font-semibold hover:bg-slate-200 transition-all duration-200"
+            <TabsTrigger
+              value="consultation"
+              className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
             >
               Book Consultation
             </TabsTrigger>
@@ -91,7 +106,7 @@ export default function ClientDashboard() {
           {/* Book Consultation Tab */}
           <TabsContent value="consultation" className="space-y-6 lg:space-y-8">
             <Card className="p-4 lg:p-8">
-              <ConsultationForm 
+              <ConsultationForm
                 onSubmit={handleConsultationBooking}
                 isOriginalLayout={true}
               />

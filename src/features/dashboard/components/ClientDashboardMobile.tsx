@@ -9,15 +9,15 @@ import { getGeminiService } from '../../../shared/services/geminiService';
 import type { LegalAnalysisResponse } from '../../../shared/services/geminiService';
 import { useSpeechRecognition } from '../../../shared/hooks/useSpeechRecognition';
 // import { useNotification } from '../../hooks/useNotification'; // Removed for now
-import { 
-  Shield, 
-  ShoppingCart, 
-  FileText, 
-  Phone, 
-  Scale, 
-  Mic, 
-  MicOff, 
-  Send, 
+import {
+  Shield,
+  ShoppingCart,
+  FileText,
+  Phone,
+  Scale,
+  Mic,
+  MicOff,
+  Send,
   Languages,
   Brain,
   Zap,
@@ -33,6 +33,18 @@ import {
   Settings,
   LogOut
 } from 'lucide-react';
+
+// Custom styles to ensure active tab styling works - same as desktop
+const customTabStyles = `
+  .custom-tab-trigger[data-state="active"] {
+    background-color: white !important;
+    color: rgb(37 99 235) !important;
+    border-color: rgb(59 130 246) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    font-weight: 600 !important;
+    transform: scale(1.02) !important;
+  }
+`;
 
 // Mobile-First Layout Component
 function MobileLayout({ children }: { children: React.ReactNode }) {
@@ -82,7 +94,7 @@ function MobileLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile Sidebar Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[60] bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)}>
-          <div 
+          <div
             className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-[70]"
             onClick={(e) => e.stopPropagation()}
           >
@@ -178,13 +190,13 @@ function MobileAIAssistant() {
 
     setIsAnalyzing(true);
     setError('');
-    
+
     try {
       const geminiService = getGeminiService();
-      
+
       // Validate if this is legal content
       const isLegalContent = await geminiService.validateLegalContent(query);
-      
+
       if (!isLegalContent) {
         setError('Please ask questions related to legal matters only.');
         return;
@@ -240,7 +252,7 @@ function MobileAIAssistant() {
           </Button>
         </div>
 
-        <Button 
+        <Button
           onClick={handleAnalysis}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           disabled={!query.trim() || isAnalyzing}
@@ -298,7 +310,7 @@ function MobileAIAssistant() {
               {analysisResult.analysis || 'Analysis completed. Please check the detailed reports in our services for more information.'}
             </p>
           </div>
-          
+
           {analysisResult.violations && analysisResult.violations.length > 0 && (
             <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
               <h4 className="font-medium text-amber-900 text-sm mb-2">Key Issues Found</h4>
@@ -383,8 +395,8 @@ function MobileServicesGrid() {
                 <h4 className="font-medium text-slate-900 text-sm leading-tight">{service.title}</h4>
                 <p className="text-xs text-slate-600 mt-1">{service.description}</p>
               </div>
-              <Button 
-                size="sm" 
+              <Button
+                size="sm"
                 className="w-full text-xs py-2"
                 variant="outline"
               >
@@ -409,7 +421,7 @@ function MobileCasesList() {
       priority: "high"
     },
     {
-      id: "C002", 
+      id: "C002",
       title: "Employment Issue",
       status: "Review",
       lastUpdate: "1 week ago",
@@ -432,7 +444,7 @@ function MobileCasesList() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-2 mb-2">
                 <h4 className="font-medium text-slate-900 text-sm truncate">{case_.title}</h4>
-                <Badge 
+                <Badge
                   variant={case_.status === 'Active' ? 'default' : 'secondary'}
                   className="text-xs"
                 >
@@ -480,10 +492,10 @@ function MobileConsultationForm() {
     setIsAnalyzing(true);
     try {
       const geminiService = getGeminiService();
-      
+
       // Validate if this is legal content
       const isLegalContent = await geminiService.validateLegalContent(formData.issue);
-      
+
       if (!isLegalContent) {
         setIssueAnalysis({
           error: 'Please describe a legal issue for consultation preparation.'
@@ -533,14 +545,14 @@ function MobileConsultationForm() {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-slate-900 mb-4">Book Consultation</h3>
-      
+
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-slate-900 mb-2">Full Name</label>
           <input
             type="text"
             value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             placeholder="Enter your name"
           />
@@ -551,7 +563,7 @@ function MobileConsultationForm() {
           <input
             type="tel"
             value={formData.phone}
-            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             placeholder="+91 XXXXX XXXXX"
           />
@@ -574,7 +586,7 @@ function MobileConsultationForm() {
           </div>
           <Textarea
             value={formData.issue}
-            onChange={(e) => setFormData({...formData, issue: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
             className="min-h-[80px] text-sm resize-none"
             placeholder="Briefly describe your legal issue..."
           />
@@ -618,7 +630,7 @@ function MobileConsultationForm() {
           <input
             type="datetime-local"
             value={formData.dateTime}
-            onChange={(e) => setFormData({...formData, dateTime: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, dateTime: e.target.value })}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
           />
         </div>
@@ -627,7 +639,7 @@ function MobileConsultationForm() {
           <Button variant="outline" className="flex-1 text-sm">
             Save Draft
           </Button>
-          <Button 
+          <Button
             onClick={handleBooking}
             disabled={!formData.name || !formData.phone || !formData.issue || !formData.dateTime || isBooking}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm"
@@ -656,29 +668,32 @@ export default function ClientDashboardMobile() {
 
   return (
     <MobileLayout>
+      {/* Custom styles for active tab visibility - same as desktop */}
+      <style dangerouslySetInnerHTML={{ __html: customTabStyles }} />
+
       {/* AI Assistant Card */}
       <MobileAIAssistant />
 
-      {/* Mobile Tab Navigation - Matches Desktop Style */}
+      {/* Mobile Tab Navigation - Updated to match desktop styling exactly */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-1 rounded-xl">
-          <TabsTrigger 
-            value="services" 
-            className="text-sm py-4 px-4 rounded-lg font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-sm active:scale-95 touch-manipulation cursor-pointer"
+        <TabsList className="grid w-full grid-cols-3 h-auto bg-slate-100 p-2 rounded-xl gap-2 mb-6">
+          <TabsTrigger
+            value="services"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
-            Services
+            Legal Services
           </TabsTrigger>
-          <TabsTrigger 
-            value="cases" 
-            className="text-sm py-4 px-4 rounded-lg font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-sm active:scale-95 touch-manipulation cursor-pointer"
+          <TabsTrigger
+            value="cases"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
             My Cases
           </TabsTrigger>
-          <TabsTrigger 
-            value="consultation" 
-            className="text-sm py-4 px-4 rounded-lg font-medium transition-all duration-200 hover:bg-slate-200 hover:shadow-sm active:scale-95 touch-manipulation cursor-pointer"
+          <TabsTrigger
+            value="consultation"
+            className="custom-tab-trigger text-xs lg:text-sm py-3 lg:py-2 px-4 lg:px-6 flex-1 rounded-lg border-2 border-transparent text-slate-600 bg-transparent hover:bg-slate-200 hover:text-slate-800 transition-all duration-200 ease-in-out"
           >
-            Book Consult
+            Book Consultation
           </TabsTrigger>
         </TabsList>
 
