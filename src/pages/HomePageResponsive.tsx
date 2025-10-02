@@ -1,11 +1,11 @@
 import React from 'react';
 
 // Import the current HomePage (we'll fix it)
-import DefaultLayout from '../layouts/DefaultLayout';
-import { useNavigation } from '../hooks/useNavigation';
-import { ROUTES } from '../constants/routes';
+import DefaultLayout from '../core/layouts/DefaultLayout';
+import { useNavigation } from '../shared/hooks/useNavigation';
+import { ROUTES } from '../core/constants/routes';
 import { Users, Scale, Shield, Clock, CheckCircle, Award, Users2, FileText } from 'lucide-react';
-import { Button } from '../components/ui/button';
+import { Button } from '../shared/components/ui/button';
 
 // Desktop HomePage Component
 function HomePageDesktop() {

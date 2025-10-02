@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import SimpleRouter from './routes/SimpleRouter';
-import { initializeGeminiService } from './services/geminiService';
-import { ToastProvider } from './components/ui/toast';
-import ErrorBoundary from './components/ui/ErrorBoundary';
+import SimpleRouter from './core/routes/SimpleRouter';
+import { initializeGeminiService } from './shared/services/geminiService';
+import { ToastProvider } from './shared/components/ui/toast';
+import ErrorBoundary from './shared/components/ui/ErrorBoundary';
 
 export default function App() {
   // Initialize Gemini AI service on app start
