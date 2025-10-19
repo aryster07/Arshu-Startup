@@ -18,10 +18,11 @@ import {
 interface DashboardPageProps {
   activeView: string;
   onViewChange: (view: string) => void;
+  onLogout?: () => void;
   children?: React.ReactNode;
 }
 
-export function DashboardPage({ activeView, onViewChange, children }: DashboardPageProps) {
+export function DashboardPage({ activeView, onViewChange, onLogout, children }: DashboardPageProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const sidebarItems = [
@@ -33,14 +34,60 @@ export function DashboardPage({ activeView, onViewChange, children }: DashboardP
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
+  // Get current page title and description based on activeView
+  const getPageHeader = () => {
+    switch (activeView) {
+      case 'dashboard':
+        return {
+          title: 'Law Bandhu Legal Portal',
+          subtitle: 'Your trusted legal assistance platform'
+        };
+      case 'consultant':
+        return {
+          title: 'Find Legal Consultant',
+          subtitle: 'Connect with expert lawyers for your legal needs'
+        };
+      case 'lawyers':
+        return {
+          title: 'My Lawyers',
+          subtitle: 'Manage your legal professionals and connections'
+        };
+      case 'cases':
+        return {
+          title: 'Your Cases',
+          subtitle: 'Track and manage your legal cases'
+        };
+      case 'payment':
+        return {
+          title: 'Payment History',
+          subtitle: 'View your transaction records and invoices'
+        };
+      case 'settings':
+        return {
+          title: 'Settings',
+          subtitle: 'Manage your account preferences'
+        };
+      default:
+        return {
+          title: 'Law Bandhu Legal Portal',
+          subtitle: 'Your trusted legal assistance platform'
+        };
+    }
+  };
+
+  const pageHeader = getPageHeader();
+
   const handleMobileNavClick = (item: string) => {
     onViewChange(item);
     setIsMobileMenuOpen(false);
   };
 
   const handleLogout = () => {
-    // TODO: Implement logout logic
-    console.log('Logout clicked');
+    if (onLogout) {
+      onLogout();
+    } else {
+      console.log('Logout clicked');
+    }
   };
 
   const handleMyProfile = () => {
@@ -102,7 +149,7 @@ export function DashboardPage({ activeView, onViewChange, children }: DashboardP
 
       {/* Main Content */}
       <div className="lg:ml-72">
-        {/* Header */}
+        {/* Dynamic Header */}
         <header className="sticky top-0 z-40 bg-slate-100 px-4 py-4 lg:px-8">
           <div className="flex items-center justify-between max-w-md mx-auto lg:max-w-none">
             <div className="flex items-center gap-3">
@@ -114,10 +161,10 @@ export function DashboardPage({ activeView, onViewChange, children }: DashboardP
               </button>
               <div>
                 <h1 className="text-slate-900 font-serif-legal text-xl lg:text-3xl font-bold">
-                  Law Bandhu Legal Portal
+                  {pageHeader.title}
                 </h1>
                 <p className="text-slate-500 text-sm lg:text-base">
-                  Your trusted legal assistance platform
+                  {pageHeader.subtitle}
                 </p>
               </div>
             </div>

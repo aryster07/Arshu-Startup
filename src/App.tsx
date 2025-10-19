@@ -12,8 +12,8 @@ type AppView = 'landing' | 'auth' | 'dashboard';
 type DashboardView = 'dashboard' | 'consultant' | 'lawyers' | 'cases' | 'payment' | 'settings';
 
 export default function App() {
-  // Start directly at dashboard (user is already logged in)
-  const [currentView, setCurrentView] = useState<AppView>('dashboard');
+  // Start at landing page (not logged in)
+  const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
 
   const handleLogin = () => {
@@ -27,6 +27,11 @@ export default function App() {
 
   const handleBackToLanding = () => {
     setCurrentView('landing');
+  };
+
+  const handleLogout = () => {
+    setCurrentView('landing');
+    setDashboardView('dashboard');
   };
 
   const handleDashboardViewChange = (view: string) => {
@@ -84,6 +89,7 @@ export default function App() {
     <DashboardPage 
       activeView={dashboardView} 
       onViewChange={handleDashboardViewChange}
+      onLogout={handleLogout}
     >
       {renderDashboardContent()}
     </DashboardPage>
