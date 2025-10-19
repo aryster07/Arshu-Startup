@@ -521,7 +521,7 @@ export function AILegalAssistant({ onNavigate }: AILegalAssistantProps = {}) {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="flex-1 bg-transparent outline-none text-slate-900 placeholder:text-slate-400 min-w-0"
-                style={{ fontSize: "15px" }}
+                style={{ fontSize: "16px" }}
                 disabled={isAnalyzing}
               />
               <button
