@@ -13,6 +13,9 @@ type AppView = 'landing' | 'auth' | 'dashboard';
 type DashboardView = 'dashboard' | 'consultant' | 'lawyers' | 'cases' | 'payment' | 'settings';
 
 function AppContent() {
+  // 🚧 DEV MODE: Bypass authentication (remove this in production!)
+  const DEV_MODE = true; // Set to false to enable authentication
+  
   // Start at landing page (not logged in)
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
@@ -56,6 +59,18 @@ function AppContent() {
   }, [isAuthenticated]);
 
   const handleLogin = () => {
+    // 🚧 DEV MODE: Skip to dashboard directly
+    if (DEV_MODE) {
+      setCurrentView('dashboard');
+      setDashboardView('dashboard');
+      window.history.pushState(
+        { view: 'dashboard', dashboardView: 'dashboard' },
+        '',
+        window.location.href
+      );
+      return;
+    }
+    
     setCurrentView('auth');
     window.history.pushState(
       { view: 'auth', dashboardView },
@@ -99,7 +114,7 @@ function AppContent() {
   };
 
   // Show loading state
-  if (isLoading) {
+  if (isLoading && !DEV_MODE) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -114,6 +129,12 @@ function AppContent() {
   if (currentView === 'landing') {
     return (
       <>
+        {/* 🚧 DEV MODE INDICATOR */}
+        {DEV_MODE && (
+          <div className="fixed top-0 left-0 right-0 bg-yellow-500 text-black text-center py-2 px-4 text-sm font-semibold z-50 shadow-lg">
+            🚧 DEV MODE: Authentication Bypassed - Click "Get Started" to go directly to Dashboard
+          </div>
+        )}
         <Navbar onLoginClick={handleLogin} />
         <LandingPage onGetStarted={handleLogin} />
       </>
@@ -155,13 +176,21 @@ function AppContent() {
   };
 
   return (
-    <DashboardPage 
-      activeView={dashboardView} 
-      onViewChange={handleDashboardViewChange}
-      onLogout={handleLogout}
-    >
-      {renderDashboardContent()}
-    </DashboardPage>
+    <>
+      {/* 🚧 DEV MODE INDICATOR on Dashboard */}
+      {DEV_MODE && (
+        <div className="fixed top-0 left-0 right-0 bg-yellow-500 text-black text-center py-2 px-4 text-sm font-semibold z-50 shadow-lg">
+          🚧 DEV MODE: Authentication Bypassed - Set DEV_MODE to false in App.tsx to enable real auth
+        </div>
+      )}
+      <DashboardPage 
+        activeView={dashboardView} 
+        onViewChange={handleDashboardViewChange}
+        onLogout={handleLogout}
+      >
+        {renderDashboardContent()}
+      </DashboardPage>
+    </>
   );
 }
 
