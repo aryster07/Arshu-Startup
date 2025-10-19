@@ -18,34 +18,84 @@ function AppContent() {
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
   const { isAuthenticated, isLoading, logout } = useAuth();
 
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state) {
+        setCurrentView(event.state.view || 'landing');
+        setDashboardView(event.state.dashboardView || 'dashboard');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    // Set initial state if not already set
+    if (!window.history.state) {
+      window.history.replaceState(
+        { view: currentView, dashboardView },
+        '',
+        window.location.href
+      );
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   // Auto-navigate to dashboard when authenticated
   useEffect(() => {
     if (isAuthenticated && currentView !== 'dashboard') {
       setCurrentView('dashboard');
+      window.history.pushState(
+        { view: 'dashboard', dashboardView: 'dashboard' },
+        '',
+        window.location.href
+      );
     }
   }, [isAuthenticated]);
 
   const handleLogin = () => {
     setCurrentView('auth');
+    window.history.pushState(
+      { view: 'auth', dashboardView },
+      '',
+      window.location.href
+    );
   };
 
   const handleAuthSuccess = () => {
     setCurrentView('dashboard');
     setDashboardView('dashboard');
+    window.history.pushState(
+      { view: 'dashboard', dashboardView: 'dashboard' },
+      '',
+      window.location.href
+    );
   };
 
   const handleBackToLanding = () => {
-    setCurrentView('landing');
+    window.history.back();
   };
 
   const handleLogout = () => {
     logout();
     setCurrentView('landing');
     setDashboardView('dashboard');
+    window.history.pushState(
+      { view: 'landing', dashboardView: 'dashboard' },
+      '',
+      window.location.href
+    );
   };
 
   const handleDashboardViewChange = (view: string) => {
     setDashboardView(view as DashboardView);
+    window.history.pushState(
+      { view: 'dashboard', dashboardView: view },
+      '',
+      window.location.href
+    );
   };
 
   // Show loading state

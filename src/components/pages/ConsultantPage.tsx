@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, MapPin, SlidersHorizontal } from "lucide-react";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
@@ -132,6 +132,38 @@ export function ConsultantPage() {
     consultationFee: [0, 10000],
   });
 
+  // Handle browser back button for lawyer profile modal
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedLawyer) {
+        setSelectedLawyer(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [selectedLawyer]);
+
+  const handleViewProfile = (lawyer: typeof mockLawyers[0]) => {
+    setSelectedLawyer(lawyer);
+    // Push state to history so back button works
+    window.history.pushState(
+      { modal: 'lawyer-profile', lawyerId: lawyer.id },
+      '',
+      window.location.href
+    );
+  };
+
+  const handleCloseProfile = () => {
+    setSelectedLawyer(null);
+    // Go back in history if this was opened via history push
+    if (window.history.state?.modal === 'lawyer-profile') {
+      window.history.back();
+    }
+  };
+
   const handleContact = (type: string, lawyerName: string) => {
     alert(`Opening ${type} for ${lawyerName}`);
   };
@@ -238,7 +270,7 @@ export function ConsultantPage() {
               onCall={() => handleContact("Call", lawyer.name)}
               onInstagram={() => handleContact("Instagram", lawyer.name)}
               onTelegram={() => handleContact("Telegram", lawyer.name)}
-              onViewProfile={() => setSelectedLawyer(lawyer)}
+              onViewProfile={() => handleViewProfile(lawyer)}
             />
           ))}
         </div>
@@ -287,7 +319,7 @@ export function ConsultantPage() {
       {selectedLawyer && (
         <LawyerProfileModal
           isOpen={!!selectedLawyer}
-          onClose={() => setSelectedLawyer(null)}
+          onClose={handleCloseProfile}
           lawyer={selectedLawyer}
           onWhatsApp={() => handleContact("WhatsApp", selectedLawyer.name)}
           onCall={() => handleContact("Call", selectedLawyer.name)}
