@@ -369,6 +369,21 @@ html {
   line-height: 1.9;
   color: #1e293b;
   
+  /* Better mobile text wrapping */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  
+  /* Improved mobile responsiveness */
+  @media (max-width: 768px) {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  
   & h1, & h2, & h3, & h4, & h5, & h6 {
     font-weight: 700;
     margin-top: 40px;
@@ -377,6 +392,8 @@ html {
     color: #0f172a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     letter-spacing: -0.02em;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   & h1 { 
@@ -401,6 +418,14 @@ html {
     border: 2px solid #3b82f6;
     border-radius: 10px;
     padding-left: 48px;
+    
+    @media (max-width: 768px) {
+      font-size: 18px;
+      padding: 12px 16px;
+      padding-left: 40px;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
   }
   
   & h2::before {
@@ -412,6 +437,11 @@ html {
     font-size: 24px;
     color: #2563eb;
     font-weight: bold;
+    
+    @media (max-width: 768px) {
+      font-size: 20px;
+      left: 14px;
+    }
   }
   
   & h3 { 
@@ -426,6 +456,14 @@ html {
     border-radius: 8px;
     padding-left: 44px;
     position: relative;
+    
+    @media (max-width: 768px) {
+      font-size: 16px;
+      padding: 10px 14px;
+      padding-left: 36px;
+      margin-top: 20px;
+      margin-bottom: 14px;
+    }
   }
   
   & h3::before {
@@ -443,6 +481,14 @@ html {
     line-height: 1.9;
     color: #334155;
     text-align: justify;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: 768px) {
+      text-align: left;
+      margin-bottom: 24px;
+      line-height: 1.75;
+    }
   }
   
   /* Special styling for first paragraph */
@@ -457,6 +503,12 @@ html {
     margin-bottom: 36px;
     border: 2px solid #f59e0b;
     box-shadow: 0 2px 4px rgba(245, 158, 11, 0.15);
+    
+    @media (max-width: 768px) {
+      font-size: 16px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
   }
   
   & strong {
@@ -485,6 +537,12 @@ html {
     border-radius: 10px;
     border: 2px solid #22c55e;
     box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1);
+    
+    @media (max-width: 768px) {
+      padding: 16px 24px;
+      padding-left: 28px;
+      margin-bottom: 24px;
+    }
   }
   
   & ul {
@@ -535,6 +593,14 @@ html {
     padding-left: 12px;
     color: #334155;
     position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+      line-height: 1.75;
+      padding-left: 8px;
+    }
   }
   
   & li:last-child {
@@ -551,6 +617,12 @@ html {
     font-weight: 600;
     border: 2px solid #c084fc;
     box-shadow: 0 1px 2px rgba(192, 132, 252, 0.15);
+    word-break: break-all;
+    
+    @media (max-width: 768px) {
+      font-size: 14px;
+      padding: 3px 8px;
+    }
   }
   
   & pre {
