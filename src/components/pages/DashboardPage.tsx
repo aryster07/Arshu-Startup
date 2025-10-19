@@ -4,7 +4,7 @@ import { FeatureCard } from "../dashboard/FeatureCard";
 import { AILegalAssistant } from "../dashboard/AILegalAssistant";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Scale } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { 
   DropdownMenu, 
@@ -24,6 +24,11 @@ interface DashboardPageProps {
 
 export function DashboardPage({ activeView, onViewChange, onLogout, children }: DashboardPageProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Scroll to top whenever activeView changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeView]);
 
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
