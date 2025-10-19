@@ -72,9 +72,6 @@ export default function App() {
       case 'settings':
         return (
           <div>
-            <h1 className="text-slate-900 mb-6" style={{ fontSize: '28px', fontWeight: 700 }}>
-              Settings
-            </h1>
             <div className="bg-white border border-slate-200 p-8 text-center" style={{ borderRadius: '12px' }}>
               <p className="text-slate-600">Settings page coming soon...</p>
             </div>

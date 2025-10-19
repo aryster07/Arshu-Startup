@@ -196,10 +196,6 @@ export function ConsultantPage() {
 
   return (
     <div>
-      <h1 className="text-slate-900 mb-6" style={{ fontSize: "28px", fontWeight: 700 }}>
-        Find Legal Consultant
-      </h1>
-
       {/* Search Bar */}
       <div className="mb-4">
         <div className="relative">

@@ -85,10 +85,6 @@ export function PaymentPage() {
 
   return (
     <div>
-      <h1 className="text-slate-900 mb-6" style={{ fontSize: '28px', fontWeight: 700 }}>
-        Payment History
-      </h1>
-
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <Card className="p-6 border border-slate-200" style={{ borderRadius: '12px' }}>

@@ -184,10 +184,6 @@ export function CasesPage() {
   // List view - show all cases
   return (
     <div>
-      <h1 className="text-slate-900 mb-6 font-serif-legal" style={{ fontSize: '28px', fontWeight: 700 }}>
-        Your Cases
-      </h1>
-
       {/* Cases List */}
       <div className="space-y-4">
         {mockCases.map((caseItem) => (

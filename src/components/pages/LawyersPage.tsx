@@ -114,15 +114,11 @@ export function LawyersPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-slate-900 mb-1" style={{ fontSize: "28px", fontWeight: 700 }}>
-            My Lawyers
-          </h1>
-          <p className="text-slate-600" style={{ fontSize: "14px" }}>
-            {lawyers.length} {lawyers.length === 1 ? "lawyer" : "lawyers"} • {starredCount} starred
-          </p>
-        </div>
+      {/* Stats Summary */}
+      <div className="mb-6">
+        <p className="text-slate-600" style={{ fontSize: "14px" }}>
+          {lawyers.length} {lawyers.length === 1 ? "lawyer" : "lawyers"} • {starredCount} starred
+        </p>
       </div>
 
       {/* Search Bar */}
