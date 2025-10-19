@@ -13,8 +13,8 @@ type AppView = 'landing' | 'auth' | 'dashboard';
 type DashboardView = 'dashboard' | 'consultant' | 'lawyers' | 'cases' | 'payment' | 'settings';
 
 function AppContent() {
-  // 🚧 DEV MODE: Bypass authentication (remove this in production!)
-  const DEV_MODE = true; // Set to false to enable authentication
+  // � AUTHENTICATION ENABLED - Auth0 OAuth & OTP active
+  const DEV_MODE = false; // Set to true to bypass authentication for testing
   
   // Start at landing page (not logged in)
   const [currentView, setCurrentView] = useState<AppView>('landing');
