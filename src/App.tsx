@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "./components/layout/Navbar";
 import { LandingPage } from "./components/pages/LandingPage";
 import { AuthPage } from "./components/pages/AuthPage";
@@ -7,14 +7,23 @@ import { ConsultantPage } from "./components/pages/ConsultantPage";
 import { LawyersPage } from "./components/pages/LawyersPage";
 import { CasesPage } from "./components/pages/CasesPage";
 import { PaymentPage } from "./components/pages/PaymentPage";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 type AppView = 'landing' | 'auth' | 'dashboard';
 type DashboardView = 'dashboard' | 'consultant' | 'lawyers' | 'cases' | 'payment' | 'settings';
 
-export default function App() {
+function AppContent() {
   // Start at landing page (not logged in)
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
+  const { isAuthenticated, isLoading, logout } = useAuth();
+
+  // Auto-navigate to dashboard when authenticated
+  useEffect(() => {
+    if (isAuthenticated && currentView !== 'dashboard') {
+      setCurrentView('dashboard');
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = () => {
     setCurrentView('auth');
@@ -30,6 +39,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    logout();
     setCurrentView('landing');
     setDashboardView('dashboard');
   };
@@ -37,6 +47,18 @@ export default function App() {
   const handleDashboardViewChange = (view: string) => {
     setDashboardView(view as DashboardView);
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Landing Page View
   if (currentView === 'landing') {
@@ -90,5 +112,13 @@ export default function App() {
     >
       {renderDashboardContent()}
     </DashboardPage>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

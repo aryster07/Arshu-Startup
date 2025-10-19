@@ -1,48 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Scale, ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { OAuthButton } from "../auth/OAuthButton";
-import { OTPInput } from "../auth/OTPInput";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { OAuthButtons } from "../auth/OAuthButtons";
+import { OTPVerification } from "../auth/OTPVerification";
 
 interface AuthPageProps {
   onBack: () => void;
   onSuccess: () => void;
 }
 
-export function AuthPage({ onBack, onSuccess }: AuthPageProps) {
-  const [step, setStep] = useState<'login' | 'otp'>('login');
-  const [emailOrPhone, setEmailOrPhone] = useState('');
-  const [resendTimer, setResendTimer] = useState(0);
+export function AuthPage({ onBack }: AuthPageProps) {
+  const [activeTab, setActiveTab] = useState<'oauth' | 'otp'>('oauth');
 
-  useEffect(() => {
-    if (resendTimer > 0) {
-      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [resendTimer]);
 
-  const handleSendOTP = () => {
-    if (emailOrPhone) {
-      setStep('otp');
-      setResendTimer(30);
-    }
-  };
-
-  const handleVerifyOTP = (otp: string) => {
-    // Mock verification
-    console.log('Verifying OTP:', otp);
-    setTimeout(() => {
-      onSuccess();
-    }, 500);
-  };
-
-  const handleResend = () => {
-    if (resendTimer === 0) {
-      setResendTimer(30);
-      // Resend OTP logic here
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
@@ -64,103 +34,29 @@ export function AuthPage({ onBack, onSuccess }: AuthPageProps) {
           </div>
           
           <h1 className="text-slate-900 mb-2" style={{ fontSize: '32px', fontWeight: 700 }}>
-            {step === 'login' ? 'Welcome to Law Bandhu' : 'Verify Your Account'}
+            Welcome to Law Bandhu
           </h1>
           <p className="text-slate-600">
-            {step === 'login' 
-              ? 'Sign in to access your legal dashboard'
-              : `We've sent a 6-digit code to ${emailOrPhone}`
-            }
+            Sign in to access your legal dashboard
           </p>
         </div>
 
         {/* Auth Card */}
         <div className="bg-white border border-slate-200 p-8 shadow-lg" style={{ borderRadius: '12px' }}>
-          {step === 'login' ? (
-            <div className="space-y-6">
-              {/* OAuth Buttons */}
-              <div className="space-y-3">
-                <OAuthButton provider="google" onClick={() => onSuccess()} />
-                <OAuthButton provider="apple" onClick={() => onSuccess()} />
-                <OAuthButton provider="meta" onClick={() => onSuccess()} />
-              </div>
-
-              {/* Divider */}
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-200" />
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="bg-white px-4 text-slate-500" style={{ fontSize: '14px' }}>OR</span>
-                </div>
-              </div>
-
-              {/* Email/Phone Input */}
-              <div className="space-y-2">
-                <label className="text-slate-700" style={{ fontSize: '14px', fontWeight: 600 }}>
-                  Email or Phone Number
-                </label>
-                <Input
-                  type="text"
-                  placeholder="Enter your email or phone"
-                  value={emailOrPhone}
-                  onChange={(e) => setEmailOrPhone(e.target.value)}
-                  className="border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  style={{ borderRadius: '8px' }}
-                />
-              </div>
-
-              {/* Send OTP Button */}
-              <Button
-                onClick={handleSendOTP}
-                className="w-full bg-primary hover:bg-blue-700 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                style={{ borderRadius: '8px' }}
-                disabled={!emailOrPhone}
-              >
-                Send OTP
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {/* OTP Input */}
-              <OTPInput onComplete={handleVerifyOTP} />
-
-              {/* Verify Button */}
-              <Button
-                onClick={() => handleVerifyOTP('123456')}
-                className="w-full bg-primary hover:bg-blue-700 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                style={{ borderRadius: '8px' }}
-              >
-                Verify and Continue
-              </Button>
-
-              {/* Resend Link */}
-              <div className="text-center">
-                {resendTimer > 0 ? (
-                  <p className="text-slate-500" style={{ fontSize: '14px' }}>
-                    Resend code in <span style={{ fontWeight: 600 }}>{resendTimer}s</span>
-                  </p>
-                ) : (
-                  <button
-                    onClick={handleResend}
-                    className="text-primary hover:underline"
-                    style={{ fontSize: '14px', fontWeight: 600 }}
-                  >
-                    Resend OTP
-                  </button>
-                )}
-              </div>
-
-              {/* Back to Login */}
-              <button
-                onClick={() => setStep('login')}
-                className="w-full text-slate-600 hover:text-slate-900 transition-colors"
-                style={{ fontSize: '14px' }}
-              >
-                Change email/phone number
-              </button>
-            </div>
-          )}
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'oauth' | 'otp')}>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="oauth">Social Login</TabsTrigger>
+              <TabsTrigger value="otp">Email/Phone OTP</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="oauth" className="mt-0">
+              <OAuthButtons />
+            </TabsContent>
+            
+            <TabsContent value="otp" className="mt-0">
+              <OTPVerification />
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Disclaimer */}

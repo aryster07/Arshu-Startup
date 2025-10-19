@@ -1,13 +1,24 @@
-import { useRef, useState, KeyboardEvent, ChangeEvent } from "react";
+import { useRef, useState, KeyboardEvent, useEffect } from "react";
 
 interface OTPInputProps {
   length?: number;
   onComplete?: (otp: string) => void;
+  value?: string;
+  onChange?: (otp: string) => void;
 }
 
-export function OTPInput({ length = 6, onComplete }: OTPInputProps) {
+export function OTPInput({ length = 6, onComplete, value, onChange }: OTPInputProps) {
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(''));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Sync with external value
+  useEffect(() => {
+    if (value !== undefined) {
+      const newOtp = value.split('').slice(0, length);
+      while (newOtp.length < length) newOtp.push('');
+      setOtp(newOtp);
+    }
+  }, [value, length]);
 
   const handleChange = (index: number, value: string) => {
     if (isNaN(Number(value))) return;
@@ -16,13 +27,16 @@ export function OTPInput({ length = 6, onComplete }: OTPInputProps) {
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
 
+    // Call onChange for controlled component
+    const otpString = newOtp.join('');
+    onChange?.(otpString);
+
     // Move to next input
     if (value && index < length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
 
     // Call onComplete when all fields are filled
-    const otpString = newOtp.join('');
     if (otpString.length === length) {
       onComplete?.(otpString);
     }
