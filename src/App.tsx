@@ -56,12 +56,10 @@ function AppContent() {
   }, [isAuthenticated]);
 
   const handleLogin = () => {
-    // MVP: Log in and go to dashboard
-    login();
-    setCurrentView('dashboard');
-    setDashboardView('dashboard');
+    // Show auth page for login/signup
+    setCurrentView('auth');
     window.history.pushState(
-      { view: 'dashboard', dashboardView: 'dashboard' },
+      { view: 'auth', dashboardView: 'dashboard' },
       '',
       window.location.href
     );
