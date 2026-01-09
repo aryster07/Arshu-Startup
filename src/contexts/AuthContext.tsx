@@ -14,7 +14,10 @@ import {
 } from '../services/authService';
 import {
   setDocument,
+  getDocument,
 } from '../services/databaseService';
+
+export type UserRole = 'user' | 'lawyer' | null;
 
 export interface User {
   id: string;
@@ -24,6 +27,8 @@ export interface User {
   picture?: string;
   emailVerified?: boolean;
   createdAt?: Date;
+  role?: UserRole;
+  profileCompleted?: boolean;
 }
 
 interface AuthContextType {
@@ -32,6 +37,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  // Role management
+  userRole: UserRole;
+  profileCompleted: boolean;
+  setUserRole: (role: UserRole) => Promise<void>;
+  completeUserProfile: (data: { name: string }) => Promise<void>;
+  completeLawyerProfile: (data: LawyerProfileData) => Promise<void>;
   // OAuth methods
   loginWithGoogle: () => Promise<void>;
   loginWithApple: () => Promise<void>;
@@ -49,6 +60,20 @@ interface AuthContextType {
   clearError: () => void;
 }
 
+interface LawyerProfileData {
+  name: string;
+  specialization: string[];
+  jurisdiction: string;
+  barCouncilId: string;
+  yearsOfExperience: number;
+  education: string;
+  languages: string[];
+  consultationFee: number;
+  bio: string;
+  officeAddress: string;
+  profilePicture?: string;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
@@ -64,18 +89,22 @@ interface AuthProviderProps {
 }
 
 // Convert Firebase User to our User type
-const mapFirebaseUser = (firebaseUser: FirebaseUser): User => ({
+const mapFirebaseUser = (firebaseUser: FirebaseUser, existingData?: any): User => ({
   id: firebaseUser.uid,
   email: firebaseUser.email || '',
-  name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
-  phone: firebaseUser.phoneNumber || undefined,
-  picture: firebaseUser.photoURL || undefined,
+  name: existingData?.name || firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
+  phone: firebaseUser.phoneNumber || existingData?.phone || undefined,
+  picture: existingData?.picture || firebaseUser.photoURL || undefined,
   emailVerified: firebaseUser.emailVerified,
+  role: existingData?.role || null,
+  profileCompleted: existingData?.profileCompleted || false,
 });
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [userRole, setUserRoleState] = useState<UserRole>(null);
+  const [profileCompleted, setProfileCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [recaptchaInitialized, setRecaptchaInitialized] = useState(false);
@@ -111,8 +140,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         
         if (fbUser) {
           setFirebaseUser(fbUser);
-          const mappedUser = mapFirebaseUser(fbUser);
+          
+          // Fetch existing user data from Firestore
+          let existingData = null;
+          try {
+            existingData = await getDocument('users', fbUser.uid);
+          } catch (err) {
+            console.warn('Error fetching user data:', err);
+          }
+          
+          const mappedUser = mapFirebaseUser(fbUser, existingData);
           setUser(mappedUser);
+          setUserRoleState(mappedUser.role || null);
+          setProfileCompleted(mappedUser.profileCompleted || false);
           
           // Save/update user in Firestore (optional, don't block auth)
           try {
@@ -123,6 +163,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
               picture: mappedUser.picture || null,
               emailVerified: mappedUser.emailVerified,
               lastLogin: new Date(),
+              role: mappedUser.role,
+              profileCompleted: mappedUser.profileCompleted,
             }, true);
           } catch (err) {
             console.warn('Error saving user to database:', err);
@@ -130,6 +172,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         } else {
           setFirebaseUser(null);
           setUser(null);
+          setUserRoleState(null);
+          setProfileCompleted(false);
         }
         setIsLoading(false);
       }, (authError) => {
@@ -289,6 +333,105 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(mockUser);
   };
 
+  // Set user role (user or lawyer)
+  const setUserRole = async (role: UserRole) => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      await setDocument('users', user.id, {
+        role,
+      }, true);
+      
+      setUserRoleState(role);
+      setUser({ ...user, role });
+    } catch (err: any) {
+      setError(err.message || 'Failed to set user role');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Complete user profile (regular user)
+  const completeUserProfile = async (data: { name: string }) => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      const profileData = {
+        name: data.name,
+        profileCompleted: true,
+        role: 'user' as UserRole,
+        updatedAt: new Date(),
+      };
+      
+      await setDocument('users', user.id, profileData, true);
+      
+      setUser({ ...user, ...profileData });
+      setProfileCompleted(true);
+      setUserRoleState('user');
+    } catch (err: any) {
+      setError(err.message || 'Failed to complete profile');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Complete lawyer profile
+  const completeLawyerProfile = async (data: LawyerProfileData) => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      // Save to users collection
+      const userProfileData = {
+        name: data.name,
+        picture: data.profilePicture || undefined,
+        profileCompleted: true,
+        role: 'lawyer' as UserRole,
+        updatedAt: new Date(),
+      };
+      
+      await setDocument('users', user.id, userProfileData, true);
+      
+      // Save detailed lawyer profile to lawyers collection
+      const lawyerData = {
+        userId: user.id,
+        email: user.email,
+        name: data.name,
+        profilePicture: data.profilePicture || null,
+        specialization: data.specialization,
+        jurisdiction: data.jurisdiction,
+        barCouncilId: data.barCouncilId,
+        yearsOfExperience: data.yearsOfExperience,
+        education: data.education,
+        languages: data.languages,
+        consultationFee: data.consultationFee,
+        bio: data.bio,
+        officeAddress: data.officeAddress,
+        isVerified: false, // Will be verified by admin
+        isActive: true,
+        rating: 0,
+        reviewCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      
+      await setDocument('lawyers', user.id, lawyerData);
+      
+      setUser({ ...user, ...userProfileData });
+      setProfileCompleted(true);
+      setUserRoleState('lawyer');
+    } catch (err: any) {
+      setError(err.message || 'Failed to complete lawyer profile');
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Logout
   const logout = async () => {
     setIsLoading(true);
@@ -296,6 +439,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       await firebaseLogout();
       setUser(null);
       setFirebaseUser(null);
+      setUserRoleState(null);
+      setProfileCompleted(false);
     } catch (err: any) {
       setError(err.message || 'Failed to logout');
     } finally {
@@ -311,6 +456,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isAuthenticated: !!user,
         isLoading,
         error,
+        userRole,
+        profileCompleted,
+        setUserRole,
+        completeUserProfile,
+        completeLawyerProfile,
         loginWithGoogle,
         loginWithApple,
         loginWithOAuth,

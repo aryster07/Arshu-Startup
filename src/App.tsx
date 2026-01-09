@@ -7,16 +7,29 @@ import { ConsultantPage } from "./components/pages/ConsultantPage";
 import { LawyersPage } from "./components/pages/LawyersPage";
 import { CasesPage } from "./components/pages/CasesPage";
 import { PaymentPage } from "./components/pages/PaymentPage";
+import { RoleSelectionPage } from "./components/pages/RoleSelectionPage";
+import { UserProfileSetup } from "./components/pages/UserProfileSetup";
+import { LawyerProfileSetup } from "./components/pages/LawyerProfileSetup";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
-type AppView = 'landing' | 'auth' | 'dashboard';
+type AppView = 'landing' | 'auth' | 'role-selection' | 'user-profile-setup' | 'lawyer-profile-setup' | 'dashboard';
 type DashboardView = 'dashboard' | 'consultant' | 'lawyers' | 'cases' | 'payment' | 'settings';
 
 function AppContent() {
   // MVP Mode - Direct access without login
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
-  const { isAuthenticated, isLoading, logout, login } = useAuth();
+  const { 
+    isAuthenticated, 
+    isLoading, 
+    logout, 
+    userRole, 
+    profileCompleted,
+    setUserRole,
+    completeUserProfile,
+    completeLawyerProfile,
+    user
+  } = useAuth();
 
   // Handle browser back/forward navigation
   useEffect(() => {
@@ -43,17 +56,24 @@ function AppContent() {
     };
   }, []);
 
-  // Auto-navigate to dashboard when authenticated
+  // Auto-navigate based on auth state and profile completion
   useEffect(() => {
     if (isAuthenticated && currentView !== 'dashboard') {
-      setCurrentView('dashboard');
+      // Check if user needs to complete profile setup
+      if (!userRole) {
+        setCurrentView('role-selection');
+      } else if (!profileCompleted) {
+        setCurrentView(userRole === 'lawyer' ? 'lawyer-profile-setup' : 'user-profile-setup');
+      } else {
+        setCurrentView('dashboard');
+      }
       window.history.pushState(
-        { view: 'dashboard', dashboardView: 'dashboard' },
+        { view: currentView, dashboardView: 'dashboard' },
         '',
         window.location.href
       );
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, userRole, profileCompleted]);
 
   const handleLogin = () => {
     // Show auth page for login/signup
@@ -66,6 +86,49 @@ function AppContent() {
   };
 
   const handleAuthSuccess = () => {
+    // After auth, check if user needs role selection
+    if (!userRole) {
+      setCurrentView('role-selection');
+    } else if (!profileCompleted) {
+      setCurrentView(userRole === 'lawyer' ? 'lawyer-profile-setup' : 'user-profile-setup');
+    } else {
+      setCurrentView('dashboard');
+      setDashboardView('dashboard');
+    }
+    window.history.pushState(
+      { view: currentView, dashboardView: 'dashboard' },
+      '',
+      window.location.href
+    );
+  };
+
+  const handleRoleSelect = async (role: 'user' | 'lawyer') => {
+    await setUserRole(role);
+    if (role === 'user') {
+      setCurrentView('user-profile-setup');
+    } else {
+      setCurrentView('lawyer-profile-setup');
+    }
+    window.history.pushState(
+      { view: currentView, dashboardView: 'dashboard' },
+      '',
+      window.location.href
+    );
+  };
+
+  const handleUserProfileComplete = async (data: { name: string }) => {
+    await completeUserProfile(data);
+    setCurrentView('dashboard');
+    setDashboardView('dashboard');
+    window.history.pushState(
+      { view: 'dashboard', dashboardView: 'dashboard' },
+      '',
+      window.location.href
+    );
+  };
+
+  const handleLawyerProfileComplete = async (data: any) => {
+    await completeLawyerProfile(data);
     setCurrentView('dashboard');
     setDashboardView('dashboard');
     window.history.pushState(
@@ -127,6 +190,41 @@ function AppContent() {
       <AuthPage 
         onBack={handleBackToLanding} 
         onSuccess={handleAuthSuccess} 
+      />
+    );
+  }
+
+  // Role Selection View
+  if (currentView === 'role-selection') {
+    return (
+      <RoleSelectionPage 
+        onSelect={handleRoleSelect}
+        onBack={() => {
+          logout();
+          setCurrentView('landing');
+        }}
+      />
+    );
+  }
+
+  // User Profile Setup View
+  if (currentView === 'user-profile-setup') {
+    return (
+      <UserProfileSetup 
+        onComplete={handleUserProfileComplete}
+        onBack={() => setCurrentView('role-selection')}
+        initialName={user?.name}
+      />
+    );
+  }
+
+  // Lawyer Profile Setup View
+  if (currentView === 'lawyer-profile-setup') {
+    return (
+      <LawyerProfileSetup 
+        onComplete={handleLawyerProfileComplete}
+        onBack={() => setCurrentView('role-selection')}
+        initialData={{ name: user?.name }}
       />
     );
   }

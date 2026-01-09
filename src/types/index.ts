@@ -4,15 +4,59 @@
  */
 
 // ============================================
-// User & Authentication
+// User Roles & Authentication
 // ============================================
 
+export type UserRole = 'user' | 'lawyer';
+
+export interface BaseUser {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+  photoURL?: string;
+  role: UserRole;
+  profileCompleted: boolean;
+  createdAt: Date;
+  lastLogin: Date;
+}
+
+export interface UserProfile extends BaseUser {
+  role: 'user';
+  // User-specific fields
+  savedLawyers?: string[]; // IDs of saved/starred lawyers
+  cases?: string[]; // IDs of cases
+}
+
+export interface LawyerProfile extends BaseUser {
+  role: 'lawyer';
+  // Lawyer-specific fields
+  specialization: string;
+  jurisdiction: string;
+  barCouncilId: string;
+  experience: number; // years
+  education: string[];
+  languages: string[];
+  consultationFee: number;
+  bio: string;
+  officeAddress?: string;
+  rating?: number;
+  reviewCount?: number;
+  casesHandled?: number;
+  successRate?: number;
+  isVerified?: boolean;
+  isAvailable?: boolean;
+}
+
+// Legacy User type for backward compatibility
 export interface User {
   id: string;
   email: string;
   name: string;
   phone?: string;
   photoURL?: string;
+  role?: UserRole;
+  profileCompleted?: boolean;
 }
 
 export interface AuthState {
