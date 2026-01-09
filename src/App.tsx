@@ -58,22 +58,34 @@ function AppContent() {
 
   // Auto-navigate based on auth state and profile completion
   useEffect(() => {
-    if (isAuthenticated && currentView !== 'dashboard') {
-      // Check if user needs to complete profile setup
+    if (isLoading) return; // Don't navigate while loading
+    
+    if (isAuthenticated) {
+      // User is logged in - determine where to navigate
       if (!userRole) {
-        setCurrentView('role-selection');
+        // Need to select role
+        if (currentView !== 'role-selection') {
+          setCurrentView('role-selection');
+        }
       } else if (!profileCompleted) {
-        setCurrentView(userRole === 'lawyer' ? 'lawyer-profile-setup' : 'user-profile-setup');
+        // Need to complete profile
+        const targetView = userRole === 'lawyer' ? 'lawyer-profile-setup' : 'user-profile-setup';
+        if (currentView !== targetView) {
+          setCurrentView(targetView);
+        }
       } else {
-        setCurrentView('dashboard');
+        // Profile complete - go to dashboard
+        if (currentView !== 'dashboard') {
+          setCurrentView('dashboard');
+        }
       }
-      window.history.pushState(
-        { view: currentView, dashboardView: 'dashboard' },
-        '',
-        window.location.href
-      );
+    } else {
+      // Not authenticated - ensure we're on landing or auth
+      if (currentView !== 'landing' && currentView !== 'auth') {
+        setCurrentView('landing');
+      }
     }
-  }, [isAuthenticated, userRole, profileCompleted]);
+  }, [isAuthenticated, isLoading, userRole, profileCompleted]);
 
   const handleLogin = () => {
     // Show auth page for login/signup
@@ -86,56 +98,36 @@ function AppContent() {
   };
 
   const handleAuthSuccess = () => {
-    // After auth, check if user needs role selection
-    if (!userRole) {
-      setCurrentView('role-selection');
-    } else if (!profileCompleted) {
-      setCurrentView(userRole === 'lawyer' ? 'lawyer-profile-setup' : 'user-profile-setup');
-    } else {
-      setCurrentView('dashboard');
-      setDashboardView('dashboard');
-    }
-    window.history.pushState(
-      { view: currentView, dashboardView: 'dashboard' },
-      '',
-      window.location.href
-    );
+    // Navigation will be handled by the useEffect based on auth state
+    // Just trigger a re-check by doing nothing - the auth state change will handle it
+    console.log('Auth success - navigation will be handled by useEffect');
   };
 
   const handleRoleSelect = async (role: 'user' | 'lawyer') => {
-    await setUserRole(role);
-    if (role === 'user') {
-      setCurrentView('user-profile-setup');
-    } else {
-      setCurrentView('lawyer-profile-setup');
+    try {
+      await setUserRole(role);
+      // Navigation will be handled by useEffect when role state updates
+    } catch (err) {
+      console.error('Failed to set role:', err);
     }
-    window.history.pushState(
-      { view: currentView, dashboardView: 'dashboard' },
-      '',
-      window.location.href
-    );
   };
 
   const handleUserProfileComplete = async (data: { name: string }) => {
-    await completeUserProfile(data);
-    setCurrentView('dashboard');
-    setDashboardView('dashboard');
-    window.history.pushState(
-      { view: 'dashboard', dashboardView: 'dashboard' },
-      '',
-      window.location.href
-    );
+    try {
+      await completeUserProfile(data);
+      // Navigation will be handled by useEffect when profile state updates
+    } catch (err) {
+      console.error('Failed to complete profile:', err);
+    }
   };
 
   const handleLawyerProfileComplete = async (data: any) => {
-    await completeLawyerProfile(data);
-    setCurrentView('dashboard');
-    setDashboardView('dashboard');
-    window.history.pushState(
-      { view: 'dashboard', dashboardView: 'dashboard' },
-      '',
-      window.location.href
-    );
+    try {
+      await completeLawyerProfile(data);
+      // Navigation will be handled by useEffect when profile state updates
+    } catch (err) {
+      console.error('Failed to complete profile:', err);
+    }
   };
 
   const handleBackToLanding = () => {
