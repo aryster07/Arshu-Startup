@@ -275,15 +275,6 @@ export function AILegalAssistant({ onNavigate }: AILegalAssistantProps = {}) {
         </p>
       </div>
 
-      {/* Configuration Warning */}
-      {!isConfigured && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-800 text-sm">
-            ⚠️ AI service is not configured. Please add your API keys to the .env file.
-          </p>
-        </div>
-      )}
-
       {/* Error Display with Retry Button */}
       {error && (
         <div className="mb-4 space-y-4">
