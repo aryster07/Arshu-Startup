@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
+import { User as FirebaseUser, onAuthStateChanged, getRedirectResult } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import {
   signInWithGoogle,
@@ -79,6 +79,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [recaptchaInitialized, setRecaptchaInitialized] = useState(false);
+
+  // Handle redirect result (for mobile OAuth)
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          console.log('Redirect sign-in successful:', result.user.email);
+          // Auth state listener will handle the user
+        }
+      } catch (err: any) {
+        console.error('Redirect sign-in error:', err);
+        setError(err.message || 'Failed to complete sign-in');
+        setIsLoading(false);
+      }
+    };
+    
+    handleRedirectResult();
+  }, []);
 
   // Listen to Firebase auth state changes
   useEffect(() => {

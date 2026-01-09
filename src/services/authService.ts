@@ -74,10 +74,23 @@ googleProvider.addScope('profile');
 googleProvider.addScope('email');
 
 /**
- * Sign in with Google (popup method - best for web)
+ * Check if user is on mobile device
  */
-export const signInWithGoogle = async (): Promise<UserCredential> => {
-  return signInWithPopup(auth, googleProvider);
+const isMobile = (): boolean => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+/**
+ * Sign in with Google (auto-detects mobile vs desktop)
+ */
+export const signInWithGoogle = async (): Promise<UserCredential | void> => {
+  if (isMobile()) {
+    // Use redirect for mobile (popup doesn't work well on mobile)
+    return signInWithRedirect(auth, googleProvider);
+  } else {
+    // Use popup for desktop
+    return signInWithPopup(auth, googleProvider);
+  }
 };
 
 /**
@@ -103,10 +116,16 @@ appleProvider.addScope('email');
 appleProvider.addScope('name');
 
 /**
- * Sign in with Apple (popup method)
+ * Sign in with Apple (auto-detects mobile vs desktop)
  */
-export const signInWithApple = async (): Promise<UserCredential> => {
-  return signInWithPopup(auth, appleProvider);
+export const signInWithApple = async (): Promise<UserCredential | void> => {
+  if (isMobile()) {
+    // Use redirect for mobile
+    return signInWithRedirect(auth, appleProvider);
+  } else {
+    // Use popup for desktop
+    return signInWithPopup(auth, appleProvider);
+  }
 };
 
 /**
