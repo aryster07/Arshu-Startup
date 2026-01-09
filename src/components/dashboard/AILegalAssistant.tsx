@@ -359,136 +359,123 @@ export function AILegalAssistant({ onNavigate }: AILegalAssistantProps = {}) {
 
       {/* AI Response Display */}
       {response && !isAnalyzing && (
-        <div className="mb-4 space-y-4">
-          {/* Show the user's query */}
+        <div className="mb-4 space-y-3">
+          {/* Show the user's query - Compact */}
           <div 
-            className="p-4 rounded-lg"
+            className="p-3 rounded-lg"
             style={{
-              background: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)",
-              border: "2px solid #cbd5e1",
+              background: "#f8fafc",
+              border: "1px solid #e2e8f0",
             }}
           >
-            <p className="text-sm font-semibold text-slate-600 mb-1">Your Query:</p>
-            <p className="text-base text-slate-900">{lastQuery}</p>
+            <p className="text-xs font-semibold text-slate-500 mb-1">Your Query:</p>
+            <p className="text-sm text-slate-800">{lastQuery}</p>
           </div>
 
-          {/* Response Card with Enhanced Styling */}
+          {/* Response Card - Compact & Mobile Optimized */}
           <div 
             className="relative overflow-hidden"
             style={{ 
-              borderRadius: "16px",
-              background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
-              border: "2px solid #e2e8f0",
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)"
+              borderRadius: "12px",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)"
             }}
           >
-            {/* Decorative top bar */}
+            {/* Slim decorative top bar */}
             <div 
               style={{
-                height: "6px",
-                background: "linear-gradient(90deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)",
+                height: "4px",
+                background: "linear-gradient(90deg, #2563eb 0%, #3b82f6 100%)",
               }}
             />
             
-            <div className="p-8">
-              <div className="mb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div 
-                    className="p-2 rounded-lg"
-                    style={{
-                      background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
-                      boxShadow: "0 4px 6px -1px rgba(37, 99, 235, 0.3)"
-                    }}
-                  >
-                    <Scale className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">Legal Analysis</h3>
-                </div>
-                
-                {/* Recommended Lawyer Type Banner - Show if personal issue */}
-                {response.isPersonalIssue && response.legalField && (
-                  <div 
-                    className="mb-5 p-4 rounded-lg"
-                    style={{
-                      background: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
-                      border: "2px solid #3b82f6",
-                    }}
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Scale className="w-4 h-4 text-blue-700" />
-                      <p className="text-sm font-semibold text-blue-900">
-                        Recommended Lawyer Type:
-                      </p>
-                    </div>
-                    <p className="text-base font-bold text-blue-800">
-                      {response.legalField} Specialist
-                    </p>
-                  </div>
-                )}
-                
-                <div className="prose prose-slate max-w-none">
-                  <FormattedMessage text={response.text} />
-                </div>
-              </div>
-              {response.provider && (
+            <div className="p-4 sm:p-5">
+              {/* Header - Compact */}
+              <div className="flex items-center gap-2 mb-3">
                 <div 
-                  className="mt-6 pt-4 text-center"
+                  className="p-1.5 rounded-md"
                   style={{
-                    borderTop: "1px solid #e2e8f0"
+                    background: "#2563eb",
                   }}
                 >
-                  <p className="text-xs text-slate-500 font-medium">
-                    ⚖️ Powered by {response.provider}
+                  <Scale className="w-4 h-4 text-white" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">Legal Analysis</h3>
+              </div>
+              
+              {/* Recommended Lawyer Type Banner - Compact */}
+              {response.isPersonalIssue && response.legalField && (
+                <div 
+                  className="mb-3 p-2.5 rounded-md"
+                  style={{
+                    background: "#eff6ff",
+                    border: "1px solid #3b82f6",
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Scale className="w-3.5 h-3.5 text-blue-600" />
+                    <p className="text-xs text-blue-700">
+                      <span className="font-medium">Recommended:</span>{' '}
+                      <span className="font-bold">{response.legalField} Specialist</span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Response Content - Optimized */}
+              <div className="prose prose-sm prose-slate max-w-none">
+                <FormattedMessage text={response.text} />
+              </div>
+
+              {/* Provider Badge - Minimal */}
+              {response.provider && (
+                <div className="mt-4 pt-3" style={{ borderTop: "1px solid #f1f5f9" }}>
+                  <p className="text-[10px] text-slate-400 text-center">
+                    ⚖️ {response.provider}
                   </p>
                 </div>
               )}
             </div>
           </div>
           
-          {/* Action Buttons */}
-          <div className="flex gap-3 justify-center items-center flex-wrap">
-            {/* Consult a Lawyer Button - Show for personal legal issues */}
+          {/* Action Buttons - Mobile Friendly */}
+          <div className="flex gap-2 justify-center items-center flex-wrap">
             {response.isPersonalIssue && (
               <Button
                 onClick={() => {
-                  // Navigate to consultant page to find lawyers
                   if (onNavigate) {
                     onNavigate('consultant');
                   }
                 }}
                 style={{ 
-                  fontSize: "14px", 
-                  padding: "12px 28px", 
+                  fontSize: "13px", 
+                  padding: "10px 16px", 
                   borderRadius: "8px",
                   backgroundColor: "#2563eb",
                   color: "#ffffff",
-                  border: "2px solid #2563eb",
                   fontWeight: "600",
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
                 }}
                 className="hover:bg-blue-700 transition-colors"
               >
-                <Scale className="w-4 h-4 mr-2" />
-                Consult a {response.legalField || 'Legal'} Lawyer
+                <Scale className="w-3.5 h-3.5 mr-1.5" />
+                Find Lawyer
               </Button>
             )}
 
-            {/* New Query Button - Always show */}
             <Button
               onClick={handleNewQuery}
               style={{ 
-                fontSize: "14px", 
-                padding: "12px 28px", 
+                fontSize: "13px", 
+                padding: "10px 16px", 
                 borderRadius: "8px",
                 backgroundColor: "#1e293b",
                 color: "#ffffff",
-                border: "2px solid #1e293b",
                 fontWeight: "600",
-                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
               }}
-              className="hover:bg-slate-900 transition-colors"
+              className="hover:bg-slate-800 transition-colors"
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-3.5 h-3.5 mr-1.5" />
               New Query
             </Button>
           </div>

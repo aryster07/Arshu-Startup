@@ -4,7 +4,6 @@
       "private": true,
       "description": "Modern legal assistance platform with AI-powered analysis",
       "dependencies": {
-            "@auth0/auth0-react": "^2.8.0",
             "@radix-ui/react-accordion": "^1.2.3",
             "@radix-ui/react-alert-dialog": "^1.1.6",
             "@radix-ui/react-aspect-ratio": "^1.1.2",
