@@ -4,7 +4,7 @@ import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { motion } from "motion/react";
 
 interface LandingPageProps {
-  onGetStarted: () => void;
+  onGetStarted: (role: 'user' | 'lawyer') => void;
 }
 
 export function LandingPage({ onGetStarted }: LandingPageProps) {
@@ -71,23 +71,33 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              className="flex flex-col gap-6 justify-center items-center"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <Button
-                onClick={onGetStarted}
-                className="bg-gold hover:bg-yellow-600 text-slate-900 px-8 py-6 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold/50"
-                style={{ borderRadius: '8px', fontSize: '18px', backgroundColor: '#f59e0b', fontWeight: 600 }}
-              >
-                Get Started <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              <p className="text-slate-300 text-lg">Choose how you want to get started:</p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  onClick={() => onGetStarted('user')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/30"
+                  style={{ borderRadius: '8px', fontSize: '18px', fontWeight: 600 }}
+                >
+                  <Users className="mr-2 w-5 h-5" /> I Need Legal Help
+                </Button>
+                <Button
+                  onClick={() => onGetStarted('lawyer')}
+                  className="bg-gold hover:bg-yellow-600 text-slate-900 px-8 py-6 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold/50"
+                  style={{ borderRadius: '8px', fontSize: '18px', backgroundColor: '#f59e0b', fontWeight: 600 }}
+                >
+                  <Gavel className="mr-2 w-5 h-5" /> I'm a Lawyer
+                </Button>
+              </div>
               <Button
                 onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-slate-900 bg-white/10 backdrop-blur-sm px-8 py-6 transition-all hover:scale-105 active:scale-95"
-                style={{ borderRadius: '8px', fontSize: '18px' }}
+                className="border-white text-white hover:bg-white hover:text-slate-900 bg-white/10 backdrop-blur-sm px-6 py-4 transition-all hover:scale-105 active:scale-95"
+                style={{ borderRadius: '8px', fontSize: '16px' }}
               >
                 Learn More
               </Button>

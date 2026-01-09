@@ -19,6 +19,7 @@ function AppContent() {
   // MVP Mode - Direct access without login
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
+  const [pendingRole, setPendingRole] = useState<'user' | 'lawyer' | null>(null);
   const { 
     isAuthenticated, 
     isLoading, 
@@ -62,8 +63,16 @@ function AppContent() {
     
     if (isAuthenticated) {
       // User is logged in - determine where to navigate
-      if (!userRole) {
-        // Need to select role
+      if (!userRole && pendingRole) {
+        // Auto-set the role that was selected before auth
+        setUserRole(pendingRole).then(() => {
+          setPendingRole(null);
+        });
+        return;
+      }
+      
+      if (!userRole && !pendingRole) {
+        // Need to select role (fallback if no pending role)
         if (currentView !== 'role-selection') {
           setCurrentView('role-selection');
         }
@@ -87,7 +96,11 @@ function AppContent() {
     }
   }, [isAuthenticated, isLoading, userRole, profileCompleted]);
 
-  const handleLogin = () => {
+  const handleLogin = (role?: 'user' | 'lawyer') => {
+    // Store the selected role for after authentication
+    if (role) {
+      setPendingRole(role);
+    }
     // Show auth page for login/signup
     setCurrentView('auth');
     window.history.pushState(
@@ -170,8 +183,8 @@ function AppContent() {
   if (currentView === 'landing') {
     return (
       <>
-        <Navbar onLoginClick={handleLogin} />
-        <LandingPage onGetStarted={handleLogin} />
+        <Navbar onLoginClick={() => handleLogin()} />
+        <LandingPage onGetStarted={(role) => handleLogin(role)} />
       </>
     );
   }
