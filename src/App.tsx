@@ -16,7 +16,7 @@ function AppContent() {
   // MVP Mode - Direct access without login
   const [currentView, setCurrentView] = useState<AppView>('landing');
   const [dashboardView, setDashboardView] = useState<DashboardView>('dashboard');
-  const { isAuthenticated, isLoading, logout } = useAuth();
+  const { isAuthenticated, isLoading, logout, login } = useAuth();
 
   // Handle browser back/forward navigation
   useEffect(() => {
@@ -56,7 +56,8 @@ function AppContent() {
   }, [isAuthenticated]);
 
   const handleLogin = () => {
-    // MVP: Go directly to dashboard
+    // MVP: Log in and go to dashboard
+    login();
     setCurrentView('dashboard');
     setDashboardView('dashboard');
     window.history.pushState(

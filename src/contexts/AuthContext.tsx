@@ -31,20 +31,16 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // Auto-login demo user for development
-  const [user, setUser] = useState<User | null>({
-    id: '1',
-    email: 'demo@lawbandhu.com',
-    name: 'Demo User',
-  });
+  // Start with no user - show landing page first
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading] = useState(false);
 
   const login = () => {
-    // Placeholder - will be replaced with Firebase Auth
+    // MVP: Set a demo user when they click "Get Started"
     const mockUser: User = {
       id: '1',
-      email: 'user@example.com',
-      name: 'Demo User',
+      email: 'user@lawbandhu.com',
+      name: 'User',
     };
     setUser(mockUser);
   };
